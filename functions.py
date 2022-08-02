@@ -19,9 +19,6 @@ def playerSearch(fName, lName, team = '0'):
     for i in range(len(data['suggestions'])):
         data['suggestions'][i] = data['suggestions'][i].split('|')
 
-    # print(data['suggestions'][0][0])
-    # exit()
-
     # doesn't filter by team if one isn't provided
     if team == '0':
         for i in range(len(data['suggestions'])):
@@ -32,23 +29,11 @@ def playerSearch(fName, lName, team = '0'):
         if data['suggestions'][i][2].lower() == fName and data['suggestions'][i][1].lower() == lName and team == data['suggestions'][i][11]:
             return data['suggestions'][i][0]
 
-        # print(data['suggestions'][i][2].lower())
-        # print(fName)
-
-        # print(data['suggestions'][i][1].lower())
-        # print(lName)
-
-        # print(data['suggestions'][i][11])
-        # print(team)
-
-        # print(f"\n")
-
-    
-
     return 0
 
-# takes in player ID, the stat you want (ex. 'goals', 'pim'), and the season (if not provided, defaults to current season), returns stat
-def playerStats(id, stat, season = CURRENT_SEASON):
+
+# takes in player ID and the season (if not provided, defaults to current season), returns dict of stats
+def playerStats(id, season = CURRENT_SEASON):
 
     url = f'https://statsapi.web.nhl.com/api/v1/people/{id}/stats?stats=statsSingleSeason&season={season}'
 
@@ -56,4 +41,9 @@ def playerStats(id, stat, season = CURRENT_SEASON):
 
     data = response.json()
 
-    return data['stats'][0]['splits'][0]['stat'][stat]
+    playerInfo = {}
+
+    for i in data['stats'][0]['splits'][0]['stat'].keys():
+        playerInfo[i] = data['stats'][0]['splits'][0]['stat'][i]
+
+    return playerInfo

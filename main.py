@@ -7,4 +7,4 @@ id = playerSearch("thomas", "chabot", "OTT")
 
 print(id)
 
-print(playerStats(id, "goals", "20202021"))
+print(playerStats(id, "20202021"))
