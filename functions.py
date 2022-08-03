@@ -14,6 +14,9 @@ def playerSearch(fName, lName, team = '0'):
 
     response = requests.get(url)
 
+    if response.status_code != 200:
+        return None
+
     data = response.json()
 
     for i in range(len(data['suggestions'])):
@@ -29,15 +32,18 @@ def playerSearch(fName, lName, team = '0'):
         if data['suggestions'][i][2].lower() == fName and data['suggestions'][i][1].lower() == lName and team == data['suggestions'][i][11]:
             return data['suggestions'][i][0]
 
-    return 0
+    return None
 
 
 # takes in player ID and the season (if not provided, defaults to current season), returns dict of stats
 def playerStats(id, season = CURRENT_SEASON):
 
-    url = f'https://statsapi.web.nhl.com/api/v1/people/{id}/stats?stats=statsSingleSeason&season={season}'
+    url = f"https://statsapi.web.nhl.com/api/v1/people/{id}/stats?stats=statsSingleSeason&season={season}"
 
     response = requests.get(url)
+
+    if response.status_code != 200:
+        return None
 
     data = response.json()
 

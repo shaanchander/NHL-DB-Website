@@ -3,8 +3,13 @@ import json
 
 from functions import *
 
-id = playerSearch("thomas", "chabot", "OTT")
+id = playerSearch("josh", "norris", "OTT")
 
 print(id)
 
-print(playerStats(id, "20202021"))
+stats = playerStats(id, "20212022")
+
+if stats != None:
+    print(stats['goals'])
+else:
+    print("Error: playerStats returned 'None'")
