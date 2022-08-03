@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}Player Info{% endblock %}
+
+{% block main %}
+
+<p>Games Played: {{ info['games'] }}</p>
+<p>Goals: {{ info['goals'] }}</p>
+<p>Assists: {{ info['assists'] }}</p>
+<p>Points: {{ info['points'] }}</p>
+<p>Plus-Minus: {{ info['plusMinus'] }}</p>
+
+{% endblock %}
