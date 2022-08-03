@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block title %}Player Search{% endblock %}
+
+{% block main %}
+
+<form action = '/playerSearch' method = 'POST'>
+    <input autofocus name = 'fName' placeholder = 'First Name' type = 'text'>
+    <input name = 'lName' placeholder =  'Last Name' type = 'text'>
+    <!-- <input name = 'team' placeholder =  'Team' type = 'text'> -->
+
+    <input name = 'season' placeholder =  'Season' type = 'text'>
+    <button type = 'submit'>Search</button>
+</form>
+
+
+
+{% endblock %}
