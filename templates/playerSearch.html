@@ -4,15 +4,39 @@
 
 {% block main %}
 
-<form action = '/playerSearch' method = 'POST'>
+<!-- <form action = '/playerSearch' method = 'POST'>
     <input autofocus name = 'fName' placeholder = 'First Name' type = 'text'>
     <input name = 'lName' placeholder =  'Last Name' type = 'text'>
-    <!-- <input name = 'team' placeholder =  'Team' type = 'text'> -->
+    <input name = 'team' placeholder =  'Team' type = 'text'>
 
-    <input name = 'season' placeholder =  'Season' type = 'text'>
+    <input name = 'season' placeholder =  'Season (ex. 20192020)' type = 'text'>
     <button type = 'submit'>Search</button>
-</form>
+</form> -->
 
+<form action = '/playerSearch' method = 'POST'>
+    <div class="row">
+      <div class="col">
+        <label for="fName" class="form-label float-start fs-4">First Name</label>
+        <input type="text" name = 'fName' class="form-control fs-5" placeholder="Drake">
+      </div>
+      <div class="col">
+        <label for="lName" class="form-label float-start fs-4">Last Name</label>
+        <input type="text" name = 'lName' class="form-control fs-5" placeholder="Batherson">
+      </div>
+      <!-- <div class="col">
+        <label for="season" class="form-label float-start fs-4">Season (Defaults to Current)</label>
+        <input type="text" name = 'season' class="form-control fs-5" placeholder="{{ curSeason }}">
+      </div>
+    </div> -->
+
+    <div class = "row">
+        <div class="col">
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary mt-4 fs-5 ps-1" type="submit">Submit</button>
+              </div>
+        </div>
+    </div>
+  </form>
 
 
 {% endblock %}

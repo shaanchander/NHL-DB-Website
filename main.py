@@ -13,3 +13,7 @@ if stats != None:
     print(stats['goals'])
 else:
     print("Error: playerStats returned 'None'")
+
+# print(peopleInfo(id))
+
+temp = allPlayerStats(id)
