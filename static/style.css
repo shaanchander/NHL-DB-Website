@@ -10,3 +10,15 @@
 .navbar-brand {
     font-size:25px;
 }
+
+.btn btn-primary mt-4 {
+    font-size: 10px;
+}
+
+#pName {
+    font-size: 60px;
+}
+
+#pNumber {
+    font-size: 50px;
+}
