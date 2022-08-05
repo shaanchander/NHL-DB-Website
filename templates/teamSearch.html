@@ -1,3 +1,28 @@
 {% extends "layout.html" %}
 
 {% block title %}Team Search{% endblock %}
+
+{% block main %}
+
+<form action = '/teamSearch' method = 'POST'>
+
+        <div class="col">
+                <label for="team" class="form-label float-start fs-4">Current/Last Team (Optional)</label>
+                <p>(for duplicate names)</p>
+                <select name="team" class="form-select" aria-label="Default select example">
+                    <option selected value='0'>Team</option>
+                    {% for i in range(32) %}
+                        <option value="{{ TEAMS_SHORT[i] }}">{{ TEAMS_LONG[i] }}</option>
+                    {% endfor %}
+                </select>
+        </div>
+
+    
+        <div class="col">
+            <div class="d-grid gap-2">
+                <button class="btn btn-primary mt-4 fs-5 ps-1" type="submit">Search</button>
+                </div>
+        </div>
+</form>
+
+{% endblock %}

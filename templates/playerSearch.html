@@ -23,6 +23,21 @@
         <label for="lName" class="form-label float-start fs-4">Last Name</label>
         <input type="text" name = 'lName' class="form-control fs-5" placeholder="Batherson">
       </div>
+      <div class="col">
+        <!-- <label for="team" class="form-label float-start fs-4">Team (Optional)</label>
+        <input type="text" name = 'team' class="form-control fs-5" placeholder="OTT"> -->
+        <!-- <label for="test" class="form-label float-start fs-4">Team (Optional)</label>
+        <input type="text" name = 'team' class="form-control fs-5" placeholder="OTT"> -->
+
+            <label for="team" class="form-label float-start fs-4">Current/Last Team (Optional)</label>
+            <p>(for duplicate names)</p>
+            <select name="team" class="form-select" aria-label="Default select example">
+                <option selected value='0'>Team</option>
+                {% for i in range(32) %}
+                    <option value="{{ TEAMS_SHORT[i] }}">{{ TEAMS_LONG[i] }}</option>
+                {% endfor %}
+            </select>
+      </div>
       <!-- <div class="col">
         <label for="season" class="form-label float-start fs-4">Season (Defaults to Current)</label>
         <input type="text" name = 'season' class="form-control fs-5" placeholder="{{ curSeason }}">
@@ -36,7 +51,7 @@
               </div>
         </div>
     </div>
-  </form>
+</form>
 
 
 {% endblock %}
