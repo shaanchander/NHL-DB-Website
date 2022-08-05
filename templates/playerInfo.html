@@ -4,53 +4,86 @@
 
 {% block main %}
 
-<!-- <p>Games Played: {{ info['games'] }}</p>
-<p>Goals: {{ info['goals'] }}</p>
-<p>Assists: {{ info['assists'] }}</p>
-<p>Points: {{ info['points'] }}</p>
-<p>Plus-Minus: {{ info['plusMinus'] }}</p> -->
+    <!-- <p>Games Played: {{ info['games'] }}</p>
+    <p>Goals: {{ info['goals'] }}</p>
+    <p>Assists: {{ info['assists'] }}</p>
+    <p>Points: {{ info['points'] }}</p>
+    <p>Plus-Minus: {{ info['plusMinus'] }}</p> -->
 
-<img src="{{ imgLink }}" class="img-thumbnail float-start ms-5" alt="player headshot">
+    <img src="{{ imgLink }}" class="img-thumbnail float-start ms-5" alt="player headshot">
 
-<h1 id = "pName">{{ person['fullName'] }} #{{ person['primaryNumber'] }}</h1>
-<h4 >{{ person['birthCity'] }}, {{ person['birthStateProvince'] }}, {{ person['birthCountry'] }}</h4>
-<h4>{{ person['birthDate'] }}</h4>
-<h4>Height: {{ person['height'] }} - Weight: {{ person['weight'] }}</h4>
-<h4>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;{{ person['positionName'] }}</h4>
-<!-- <h1 id = "pNumber">#{{ person['primaryNumber'] }}</h1> -->
+    <h1 id = "pName">{{ person['fullName'] }} #{{ person['primaryNumber'] }}</h1>
+    <h4 >{{ person['birthInfo'] }}</h4>
+    <h4>{{ person['birthDate'] }} (Age {{ person['currentAge'] }})</h4>
+    <h4>Height: {{ person['height'] }} - Weight: {{ person['weight'] }} lbs</h4>
+    <h4>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;{{ person['positionName'] }} - Shoots: {{ person['shootsCatches'] }}</h4>
+    {% if person['teamName'] %}
+    <h4>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Current Team: {{ person['teamName'] }}</h4>
+    {% endif %}
+    <!-- <h1 id = "pNumber">#{{ person['primaryNumber'] }}</h1> -->
 
-<br>
+    <br>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-          <th scope="col">Year</th>
-          <th scope="col">League</th>
-          <th scope="col">Team</th>
-          <th scope="col">Games</th>
-          <th scope="col">Goals</th>
-          <th scope="col">Assists</th>
-          <th scope="col">Points</th>
-          <th scope="col">+/-</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% set rowNum = 1 %}
+    <table class="table table-striped">
+        {% if person['positionName'] != "Goalie" %}
+            <thead>
+                <tr>
+                <th scope="col">Year</th>
+                <th scope="col">League</th>
+                <th scope="col">Team</th>
+                <th scope="col">Games</th>
+                <th scope="col">Goals</th>
+                <th scope="col">Assists</th>
+                <th scope="col">Points</th>
+                <th scope="col">+/-</th>
+                <th scope="col">PIMs</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set rowNum = 1 %}
 
-          {% for i in info|reverse %}
-            <tr>
-                <!-- <th scope = "row">{{ rowNum }}</th> -->
-                <td>{{ i['season'] }}</td>
-                <td>{{ i['league'] }}</td>
-                <td>{{ i['team'] }}</td>
-                <td>{{ i['games'] }}</td>
-                <td>{{ i['goals'] }}</td>
-                <td>{{ i['assists'] }}</td>
-                <td>{{ i['points'] }}</td>
-                <td>{{ i['plusMinus'] }}</td>
-            </tr>
-          {% endfor %}
-      </tbody>
-  </table>
+                {% for i in info|reverse %}
+                    <tr>
+                        <!-- <th scope = "row">{{ rowNum }}</th> -->
+                        <td>{{ i['season'] }}</td>
+                        <td>{{ i['league'] }}</td>
+                        <td>{{ i['team'] }}</td>
+                        <td>{{ i['games'] }}</td>
+                        <td>{{ i['goals'] }}</td>
+                        <td>{{ i['assists'] }}</td>
+                        <td>{{ i['points'] }}</td>
+                        <td>{{ i['plusMinus'] }}</td>
+                        <td>{{ i['pim'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            {% else %}
+                <thead>
+                    <tr>
+                    <th scope="col">Year</th>
+                    <th scope="col">League</th>
+                    <th scope="col">Team</th>
+                    <th scope="col">Wins</th>
+                    <th scope="col">Save Percentage</th>
+                    <th scope="col">GAA</th>
+                </thead>
+                <tbody>
+                    {% set rowNum = 1 %}
+
+                    {% for i in info|reverse %}
+                        <tr>
+                            <!-- <th scope = "row">{{ rowNum }}</th> -->
+                            <td>{{ i['season'] }}</td>
+                            <td>{{ i['league'] }}</td>
+                            <td>{{ i['team'] }}</td>
+                            <td>{{ i['wins'] }}</td>
+                            <td>{{ i['savePercentage'] }}</td>
+                            <td>{{ i['goalAgainstAverage'] }}</td>
+                            
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            {% endif %}
+    </table>
 
 {% endblock %}

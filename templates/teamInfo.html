@@ -1,3 +1,118 @@
 {% extends "layout.html" %}
 
 {% block title %}Team Info{% endblock %}
+
+{% block main %}
+
+<img src="{{ teamInfo['logoUrl'] }}" class="float-start ms-5" alt="team logo" width = 800 height = 250>
+
+<div class = "text-start">
+    <h1 id = "teamName" class="fw-bold text-start ms-5">{{ teamInfo['teamName'] }}</h1>
+    <a href="{{ teamInfo['officialSiteUrl'] }}" class = "fs-4">Official Team Website</a>
+    <h4>Arena: {{ teamInfo['venueName'] }}</h4>
+    <h4>Conference: {{ teamInfo['conferenceName'] }}</h4>
+    <h4>Division: {{ teamInfo['divName'] }}</h4>
+</div>
+<br> <br>
+
+<div class="container">
+    <div class="row align-items-start">
+        <h1>Forwards</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">Number</th>
+                    <th scope="col">Goals</th>
+                    <th scope="col">Assists</th>
+                    <th scope="col">Points</th>
+                    <th scope="col">+/-</th>
+            </thead>
+            <tbody>
+                {% set rowNum = 1 %}
+
+                {% for i in teamRoster %}
+                    {% if i['positionAbbreviation'] in ["RW", "C", "LW"] %}
+                        <tr>
+                            <!-- <th scope = "row">{{ rowNum }}</th> -->
+                            <td>{{ i['name'] }}</td>
+                            <td>{{ i['positionAbbreviation'] }}</td>
+                            <td>{{ i['number'] }}</td>
+                            <td>{{ i['stats']['goals'] }}</td>
+                            <td>{{ i['stats']['assists'] }}</td>
+                            <td>{{ i['stats']['points'] }}</td>
+                            <td>{{ i['stats']['plusMinus'] }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+    </table>
+    </div>
+    <div class="row align-items-center">
+        <h1>Defencemen</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Position</th>
+                <th scope="col">Number</th>
+                <th scope="col">Goals</th>
+                <th scope="col">Assists</th>
+                <th scope="col">Points</th>
+                <th scope="col">+/-</th>
+            </thead>
+            <tbody>
+                {% set rowNum = 1 %}
+
+                {% for i in teamRoster %}
+                    {% if i['positionAbbreviation'] in ["D"] %}
+                        <tr>
+                            <!-- <th scope = "row">{{ rowNum }}</th> -->
+                            <td>{{ i['name'] }}</td>
+                            <td>{{ i['positionAbbreviation'] }}</td>
+                            <td>{{ i['number'] }}</td>
+                            <td>{{ i['stats']['goals'] }}</td>
+                            <td>{{ i['stats']['assists'] }}</td>
+                            <td>{{ i['stats']['points'] }}</td>
+                            <td>{{ i['stats']['plusMinus'] }}</td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+    </table>
+  </div>
+
+  <div class="row align-items-center">
+    <h1>Goalies (the crazies)</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Position</th>
+            <th scope="col">Number</th>
+            <th scope="col">Save Percentage</th>
+            <th scope="col">GAA</th>
+        </thead>
+        <tbody>
+            {% set rowNum = 1 %}
+
+            {% for i in teamRoster %}
+                {% if i['positionAbbreviation'] in ["G"] %}
+                    <tr>
+                        <!-- <th scope = "row">{{ rowNum }}</th> -->
+                        <td>{{ i['name'] }}</td>
+                        <td>{{ i['positionAbbreviation'] }}</td>
+                        <td>{{ i['number'] }}</td>
+                        <td>{{ i['stats']['savePercentage'] }}</td>
+                        <td>{{ i['stats']['goalAgainstAverage'] }}</td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+</table>
+</div>
+
+    
+
+{% endblock %}
