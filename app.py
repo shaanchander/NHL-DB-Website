@@ -85,7 +85,23 @@ def team_Search():
 
 
 
-@app.route("/schedule")
+@app.route("/scheduleSearch", methods = ['GET', 'POST'])
 def schedule():
     if request.method == "GET":
-        return render_template("schedule.html")
+        return render_template("scheduleSearch.html", TEAMS_SHORT = TEAMS_SHORT, TEAMS_LONG = TEAMS_LONG, timeZones = pytz.common_timezones_set)
+
+    team = request.form.get("team")
+    tz = request.form.get("tz")
+
+    team_schedule = teamSchedule(team, tz)
+
+    team_info = teamInfo(team)
+
+    return render_template("scheduleInfo.html", teamInfo = team_info, teamSchedule = team_schedule)
+
+
+@app.route("/standings", methods = ['GET'])
+def standings():
+
+
+    return render_template("standings.html")

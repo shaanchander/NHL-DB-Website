@@ -1,6 +1,3 @@
-import requests
-import json
-
 from functions import *
 
 id = playerSearch("josh", "norris", "OTT")
@@ -17,3 +14,9 @@ else:
 # print(peopleInfo(id))
 
 temp = allPlayerStats(id)
+
+temp1 = teamSchedule("OTT", "EST")
+
+# print(pytz.all_timezones)
+
+# print(temp1[0])
