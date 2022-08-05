@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 
-{% block title %}Team Search{% endblock %}
+{% block title %}Schedule Search{% endblock %}
 
 {% block main %}
 
-<form action = '/teamSearch' method = 'POST'>
+<form action = '/scheduleSearch' method = 'POST'>
 
         <div class="col">
                 <label for="team" class="form-label float-start fs-4">Team</label>
@@ -12,6 +12,14 @@
                     <option selected value='0'>Team</option>
                     {% for i in range(32) %}
                         <option value="{{ TEAMS_SHORT[i] }}">{{ TEAMS_LONG[i] }}</option>
+                    {% endfor %}
+                </select>
+                
+                <label for="tz" class="form-label float-start fs-4">Timezone (Optional, default is EST)</label>
+                <select name="tz" class="form-select" aria-label="Default select example">
+                    <option selected value='America/New_York'>Timezone</option>
+                    {% for i in timeZones %}
+                        <option value="{{ i }}">{{ i }}</option>
                     {% endfor %}
                 </select>
         </div>
