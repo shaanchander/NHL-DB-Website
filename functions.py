@@ -4,7 +4,7 @@ from datetime import datetime
 import pytz
 
 # ** ENSURE THESE CONSTANTS ARE UP TO DATE **
-CURRENT_SEASON = '20222023'
+CURRENT_SEASON = '20212022'
 
 # east, west
 TEAMS_IN_CONFERENCE = [16, 16]
