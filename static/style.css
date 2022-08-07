@@ -24,13 +24,17 @@
 }
 
 body {
-    /* background-color: #dfe6e9; */
-  }
+    background-color: #dfe6e9;
+}
 
 .navbar {
     background-color: #95a5a6;;
 }
 
 #teamName {
+    font-size: 60px;
+}
+
+.standingsTitles {
     font-size: 60px;
 }

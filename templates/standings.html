@@ -1,1 +1,226 @@
 {% extends "layout.html" %}
+
+{% block main %}
+
+<div class = "container-fluid">
+    <h1 class = "fw-bold standingsTitles text-decoration-underline">League Standings</h1>
+    <table class="table table-striped mb-3">
+        <thead>
+            <tr>
+                <th scope="col">Place</th>
+                <th scope="col">Team</th>
+                <th scope="col">Points</th>
+                <th scope="col">Games</th>
+                <th scope="col">Wins</th>
+                <th scope="col">Losses</th>
+                <th scope="col">OT Losses</th>
+            </tr>
+
+        </thead>
+        <tbody>
+
+            {% for i in range(32) %}
+                <tr>
+                    <td>{{ leagueStandings[i]['leagueRank'] }}</td>
+                    <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ leagueStandings[i]['teamID'] }}.svg" width = 40 height = 40>{{ leagueStandings[i]['teamName'] }}</td>
+                    <td>{{ leagueStandings[i]['points'] }}</td>
+                    <td>{{ leagueStandings[i]['gamesPlayed'] }}</td>
+                    <td>{{ leagueStandings[i]['wins'] }}</td>
+                    <td>{{ leagueStandings[i]['losses'] }}</td>
+                    <td>{{ leagueStandings[i]['ot'] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<h1 class = "fw-bold standingsTitles text-decoration-underline mt-5">Conference Standings</h1>
+<br>
+
+<div class = "container-fluid">
+    <div class="row align-items-start">
+        <div class="col">
+            <h1 class = "fw-bold">Eastern Conference</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Place</th>
+                        <th scope="col">Team</th>
+                        <th scope="col">Points</th>
+                        <th scope="col">Wins</th>
+                        <th scope="col">Losses</th>
+                        <th scope="col">OT Losses</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for i in range(16) %}
+                        <tr>
+                            <td>{{ conferenceStandings[0][i]['conferenceRank'] }}</td>
+                            <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ conferenceStandings[0][i]['teamID'] }}.svg" width = 40 height = 40>  {{ conferenceStandings[0][i]['teamName'] }}</td>
+                            <td>{{ conferenceStandings[0][i]['points'] }}</td>
+                            <td>{{ conferenceStandings[0][i]['wins'] }}</td>
+                            <td>{{ conferenceStandings[0][i]['losses'] }}</td>
+                            <td>{{ conferenceStandings[0][i]['ot'] }}</td>
+                            </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class = "col">
+            <h1 class = "fw-bold">Western Conference</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Place</th>
+                        <th scope="col">Team</th>
+                        <th scope="col">Points</th>
+                        <th scope="col">Wins</th>
+                        <th scope="col">Losses</th>
+                        <th scope="col">OT Losses</th>
+                </thead>
+                <tbody>
+
+                    {% for i in range(16) %}
+                        <tr>
+                            <td>{{ conferenceStandings[1][i]['conferenceRank'] }}</td>
+                            <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ conferenceStandings[1][i]['teamID'] }}.svg" width = 40 height = 40>  {{ conferenceStandings[1][i]['teamName'] }}</td>
+                            <td>{{ conferenceStandings[1][i]['points'] }}</td>
+                            <td>{{ conferenceStandings[1][i]['wins'] }}</td>
+                            <td>{{ conferenceStandings[1][i]['losses'] }}</td>
+                            <td>{{ conferenceStandings[1][i]['ot'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class = "container-fluid">
+
+    <h1 class = "fw-bold standingsTitles text-decoration-underline">Division Standings</h1>
+    <br> <br>
+
+    <div class="row align-items-start">
+        <div class="col">
+            <h1 class = "fw-bold">Atlantic</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Place</th>
+                        <th scope="col">Team</th>
+                        <th scope="col">Points</th>
+                        <th scope="col">Wins</th>
+                        <th scope="col">Losses</th>
+                        <th scope="col">OT Losses</th>
+                </thead>
+                <tbody>
+
+                    {% for i in range(8) %}
+                        <tr>
+                            <td>{{ divisionStandings[0][i]['divisionRank'] }}</td>
+                            <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ divisionStandings[0][i]['teamID'] }}.svg" width = 40 height = 40>  {{ divisionStandings[0][i]['teamName'] }}</td>
+                            <td>{{ divisionStandings[0][i]['points'] }}</td>
+                            <td>{{ divisionStandings[0][i]['wins'] }}</td>
+                            <td>{{ divisionStandings[0][i]['losses'] }}</td>
+                            <td>{{ divisionStandings[0][i]['ot'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    
+
+        <div class = "col">
+            <h1 class = "fw-bold">Metropolitan</h1>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Place</th>
+                            <th scope="col">Team</th>
+                            <th scope="col">Points</th>
+                            <th scope="col">Wins</th>
+                            <th scope="col">Losses</th>
+                            <th scope="col">OT Losses</th>
+                    </thead>
+                    <tbody>
+
+                        {% for i in range(8) %}
+                            <tr>
+                                <td>{{ divisionStandings[1][i]['divisionRank'] }}</td>
+                                <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ divisionStandings[1][i]['teamID'] }}.svg" width = 40 height = 40>  {{ divisionStandings[1][i]['teamName'] }}</td>
+                                <td>{{ divisionStandings[1][i]['points'] }}</td>
+                                <td>{{ divisionStandings[1][i]['wins'] }}</td>
+                                <td>{{ divisionStandings[1][i]['losses'] }}</td>
+                                <td>{{ divisionStandings[1][i]['ot'] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row align-items-start">
+        <div class = "col">
+            <h1 class = "fw-bold">Central</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Place</th>
+                        <th scope="col">Team</th>
+                        <th scope="col">Points</th>
+                        <th scope="col">Wins</th>
+                        <th scope="col">Losses</th>
+                        <th scope="col">OT Losses</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for i in range(8) %}
+                        <tr> 
+                            <td>{{ divisionStandings[2][i]['divisionRank'] }}</td>
+                            <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ divisionStandings[2][i]['teamID'] }}.svg" width = 40 height = 40>  {{ divisionStandings[2][i]['teamName'] }}</td>
+                            <td>{{ divisionStandings[2][i]['points'] }}</td>
+                            <td>{{ divisionStandings[2][i]['wins'] }}</td>
+                            <td>{{ divisionStandings[2][i]['losses'] }}</td>
+                            <td>{{ divisionStandings[2][i]['ot'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class = "col">
+            <h1 class = "fw-bold">Pacific</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Place</th>
+                        <th scope="col">Team</th>
+                        <th scope="col">Points</th>
+                        <th scope="col">Wins</th>
+                        <th scope="col">Losses</th>
+                        <th scope="col">OT Losses</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for i in range(8) %}
+                        <tr>
+                            <td>{{ divisionStandings[3][i]['divisionRank'] }}</td>
+                            <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ divisionStandings[3][i]['teamID'] }}.svg" width = 40 height = 40>  {{ divisionStandings[3][i]['teamName'] }}</td>
+                            <td>{{ divisionStandings[3][i]['points'] }}</td>
+                            <td>{{ divisionStandings[3][i]['wins'] }}</td>
+                            <td>{{ divisionStandings[3][i]['losses'] }}</td>
+                            <td>{{ divisionStandings[3][i]['ot'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

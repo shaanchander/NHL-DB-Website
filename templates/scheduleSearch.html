@@ -4,6 +4,8 @@
 
 {% block main %}
 
+<img src="/static/calendar-graphic-wide.jpg" width = 1300 height = 300 alt="calendars" class = "mb-5">
+
 <form action = '/scheduleSearch' method = 'POST'>
 
         <div class="col">
@@ -11,7 +13,15 @@
                 <select name="team" class="form-select" aria-label="Default select example">
                     <option selected value='0'>Team</option>
                     {% for i in range(32) %}
-                        <option value="{{ TEAMS_SHORT[i] }}">{{ TEAMS_LONG[i] }}</option>
+                        <option value="{{ TEAMS_LONG[i] }}">{{ TEAMS_LONG[i] }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="matchup" class="form-label float-start fs-4">Matched Against... (Optional)</label>
+                <select name="matchup" class="form-select" aria-label="Default select example">
+                    <option selected value='0'>Team</option>
+                    {% for i in range(32) %}
+                        <option value="{{ TEAMS_LONG[i] }}">{{ TEAMS_LONG[i] }}</option>
                     {% endfor %}
                 </select>
                 

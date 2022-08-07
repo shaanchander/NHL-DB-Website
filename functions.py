@@ -1,16 +1,23 @@
-from calendar import month
-from ctypes.wintypes import HMODULE
-from unicodedata import name
 from flask import render_template
 import requests
 from datetime import datetime
-from zoneinfo import ZoneInfo
 import pytz
 
-# ** ENSURE THIS IS UP TO DATE **
+# ** ENSURE THESE CONSTANTS ARE UP TO DATE **
 CURRENT_SEASON = '20222023'
 
-TEAM_IDS = {"ANA":24, "ARI":53, "BOS":6, "BUF":7, "CGY":20, "CAR":12, "CHI":16, "COL":21, "CBJ":29, "DAL":25, "DET":17, "EDM":22, "FLA":13, "LAK":26, "MIN":30, "MTL":8, "NSH":18, "NJD":1, "NYI":2, "NYR":3, "OTT":9, "PHI":4, "PIT":5, "SJS":28, "SEA":55, "STL":19, "TBL":14, "TOR":10, "VAN":23, "VGK":54, "WSH":15, "WIN":52}
+# east, west
+TEAMS_IN_CONFERENCE = [16, 16]
+
+# atlantic, metro, central, pacific
+TEAMS_IN_DIV = [8, 8, 8, 8]
+
+TEAMS_IN_LEAGUE = 32
+
+TEAM_IDS_SHORT = {"ANA":24, "ARI":53, "BOS":6, "BUF":7, "CGY":20, "CAR":12, "CHI":16, "COL":21, "CBJ":29, "DAL":25, "DET":17, "EDM":22, "FLA":13, "LAK":26, "MIN":30, "MTL":8, "NSH":18, "NJD":1, "NYI":2, "NYR":3, "OTT":9, "PHI":4, "PIT":5, "SJS":28, "SEA":55, "STL":19, "TBL":14, "TOR":10, "VAN":23, "VGK":54, "WSH":15, "WIN":52}
+
+TEAM_IDS_LONG = {"Anaheim Ducks":24, "Arizona Coyotes":53, "Boston Bruins":6, "Buffalo Sabres":7, "Calgary Flames":20, "Carolina Hurricanes":12, "Chicago Blackhawks":16, "Colorado Avalanche":21, "Columbus Blue Jackets":29, "Dallas Stars":25, "Detroit Red Wings":17, "Edmonton Oilers":22, "Florida Panthers":13, "Los Angeles Kings":26, "Minnesota Wild":30, "Montréal Canadiens":8, "Nashville Predators":18, "New Jersey Devils":1, "New York Islanders":2, "New York Rangers":3, "Ottawa Senators":9, "Philadelphia Flyers":4, "Pittsburgh Penguins":5, "San Jose Sharks":28, "Seattle Kraken":55, "St. Louis Blues":19, "Tampa Bay Lightning":14, "Toronto Maple Leafs":10, "Vancouver Canucks":23, "Vegas Golden Knights":54, "Washington Capitals":15, "Winnipeg Jets":52}
+
 
 # TEAM_IDS = [1,2,3,4,5,6,7,8,9,10,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,28,29,30,52,53,54]
 
@@ -193,7 +200,13 @@ def peopleInfo(id):
 # gets team info
 def teamInfo(team):
 
-    teamID = TEAM_IDS[team]
+    if team == '0':
+        return render_template("error.html", message = "Team not Found (field empty)")
+
+    if len(team) == 3:
+        teamID = TEAM_IDS_SHORT[team]
+    else:
+        teamID = TEAM_IDS_LONG[team]
 
     teamUrl = f"https://statsapi.web.nhl.com/api/v1/teams/{teamID}/"
 
@@ -221,7 +234,7 @@ def teamInfo(team):
 # gets team roster info
 def teamRoster(team):
 
-    teamID = TEAM_IDS[team]
+    teamID = TEAM_IDS_SHORT[team]
 
     url = f"https://statsapi.web.nhl.com/api/v1/teams/{teamID}/roster"
 
@@ -232,37 +245,47 @@ def teamRoster(team):
 
     data = response.json()
 
+    # creates list of dicts
     info = [{} for _ in range(len(data['roster']))]
 
+    # for each roster player
     for i in range(len(data['roster'])):
         info[i]['name'] = data['roster'][i]['person']['fullName']
 
+        # just because why not
         if info[i]['name'] == "Tim Stützle":
             info[i]['name'] = "Tim 'Pentagon' Stützle"
+
+        # gets number, if none, puts '-'
         try:
             info[i]['number'] = f"#{data['roster'][i]['jerseyNumber']}"
         except KeyError:
             info[i]['number'] = '-'
 
+        # gets remaining info
         info[i]['id'] = data['roster'][i]['person']['id']
         info[i]['positionName'] = data['roster'][i]['position']['name']
         info[i]['positionType'] = data['roster'][i]['position']['type']
         info[i]['positionAbbreviation'] = data['roster'][i]['position']['abbreviation']
 
+        # gets their player id
         info[i]['stats'] = playerStats(info[i]['id'])
 
     return info
 
+# converts datetime object from UTC to input timezone (from stackoverflow)
 def utc_to_time(naive, timezone="Europe/Istanbul"):
     return naive.replace(tzinfo=pytz.utc).astimezone(pytz.timezone(timezone))
 
-# gets a team's schedule
+# gets a team's schedule (returns list of dicts with info on each game)
 def teamSchedule(team, timeZone, season = CURRENT_SEASON):
 
+    # error trapping
     if team == '0':
         return render_template("error.html", message = "Team not Found")
 
-    teamID = TEAM_IDS[team]
+    # gets team ID
+    teamID = TEAM_IDS_LONG[team]
 
     url = f"https://statsapi.web.nhl.com/api/v1/schedule?teamId={teamID}&season={season}"
 
@@ -273,10 +296,11 @@ def teamSchedule(team, timeZone, season = CURRENT_SEASON):
 
     data = response.json()
 
+    # initializes list of dicts
     info = [{} for _ in range(data['totalGames'])]
 
+    # initializes counters
     totalGamesIndex = 0
-
     dayIndex = 0
     gameIndex = 0
 
@@ -291,6 +315,7 @@ def teamSchedule(team, timeZone, season = CURRENT_SEASON):
         # print(datetime.timestamp(info[totalGamesIndex]['gameDate'], tz=None))
         # exit
 
+        # gets time in UTC of game
         year = int(dateTime[:4])
         month = int((dateTime)[5:7]) 
         day = int(dateTime[8:10])
@@ -301,52 +326,13 @@ def teamSchedule(team, timeZone, season = CURRENT_SEASON):
         # print(second)
         # exit
 
+        # converts date and time to selected timezone
         tempDate = datetime(year, month, day, hour, minute)
-
         tempDate = utc_to_time(tempDate, timeZone)
-
         info[totalGamesIndex]['gameDate'] = tempDate.strftime("%b %d, %Y")
         info[totalGamesIndex]['gameTime'] = tempDate.strftime("%I:%M%p")
 
-        # tz = pytz.timezone(timeZone)
-        # utc = pytz.utc
-
-        # tempDate = tz.localize(tempDate)
-
-        # print(tempDate)
-        # exit()
-
-        # pytz.utc.localize(utc_time, is_dst=None).astimezone(timeZone)
-
-        # utc = ZoneInfo('UTC')
-        # tz = ZoneInfo(timeZone)
-
-        # localtime = utctime.astimezone(localtz)
-
-        # utc_unaware = datetime(year, month, day, hour, minute)
-        # utc_aware = utc_unaware.replace(tzinfo=ZoneInfo('UTC'))  
-        # local_aware = utc_aware.astimezone(ZoneInfo('EST'))
-
-        # print(local_aware)
-        # exit()
-
-        # info[totalGamesIndex]['gameDate'] = local_aware.strftime("%b %d, %Y")
-        # info[totalGamesIndex]['gameTime'] = local_aware.strftime("%I:%M%p")
-
-        # print(finalTime)
-        # exit()
-
-        # dateTimeString = f"{year}-{month}-{day} {hour}:{minute}:{second}"
-        # dateTimeObject = datetime.strptime(dateTimeString, '%Y-%m-%d %H:%M:%S')
-
-        # epochSeconds = dateTimeObject.timestamp()
-
-        # finalTime = epochSeconds.strftime("%b %d %Y at %I:%M%p")
-
-        # info[totalGamesIndex]['gameDate'] = 
-
-        # info[totalGamesIndex]['gameTime'] = 
-
+        # gets remaining game info
         info[totalGamesIndex]['gameType'] =  data['dates'][dayIndex]['games'][gameIndex]['gameType']
         info[totalGamesIndex]['venueName'] = data['dates'][dayIndex]['games'][gameIndex]['venue']['name']
         info[totalGamesIndex]['awayTeamName'] = data['dates'][dayIndex]['games'][gameIndex]['teams']['away']['team']['name']
@@ -355,17 +341,62 @@ def teamSchedule(team, timeZone, season = CURRENT_SEASON):
         info[totalGamesIndex]['homeTeamId'] = data['dates'][dayIndex]['games'][gameIndex]['teams']['home']['team']['id']
         info[totalGamesIndex]['gameStatus'] = data['dates'][dayIndex]['games'][gameIndex]['status']['detailedState']
 
+        # handles counter values 
         if gameIndex < len(data['dates'][dayIndex]['games']) - 1: 
             gameIndex += 1
         else:
             dayIndex += 1
             gameIndex = 0
-
         totalGamesIndex += 1
 
+        # if all games have been stored, break
         if totalGamesIndex >= data['totalGames']:
             break
 
     return info
 
-# def standings():
+# gets standings data (including wins, losses, etc.), gets from given season, if none given, defaults to current
+def getStandings(season = CURRENT_SEASON):
+
+    season = "20212022"
+
+    url = f"https://statsapi.web.nhl.com/api/v1/standings?season={season}"
+
+    response = requests.get(url)
+
+    if response.status_code != 200:
+        return response.status_code
+
+    data = response.json()
+
+    numTeams = 0
+
+    # initializes list of dicts
+    info = [{} for _ in range(TEAMS_IN_LEAGUE)]
+
+    # gets info for each team in each division
+    for i in range(len(data['records'])):
+        for j in range(len(data['records'][i]['teamRecords'])):
+            info[numTeams]['conferenceName'] = data['records'][i]['conference']['name']
+            info[numTeams]['divisionName'] = data['records'][i]['division']['name']
+
+            info[numTeams]['divisionRank'] = data['records'][i]['teamRecords'][j]['divisionRank']
+            info[numTeams]['conferenceRank'] = data['records'][i]['teamRecords'][j]['conferenceRank']
+            info[numTeams]['leagueRank'] = data['records'][i]['teamRecords'][j]['leagueRank']
+
+            info[numTeams]['wins'] = data['records'][i]['teamRecords'][j]['leagueRecord']['wins']
+            info[numTeams]['losses'] = data['records'][i]['teamRecords'][j]['leagueRecord']['losses']
+            info[numTeams]['ot'] = data['records'][i]['teamRecords'][j]['leagueRecord']['ot']
+
+            info[numTeams]['gamesPlayed'] = data['records'][i]['teamRecords'][j]['gamesPlayed']
+
+            info[numTeams]['points']= info[numTeams]['wins'] * 2 + info[numTeams]['ot']
+
+            info[numTeams]['teamName'] = data['records'][i]['teamRecords'][j]['team']['name']
+
+            info[numTeams]['teamID'] = TEAM_IDS_LONG[info[numTeams]['teamName']]
+
+            numTeams += 1
+
+    return info
+
