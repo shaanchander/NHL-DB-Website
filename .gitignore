@@ -131,3 +131,5 @@ dmypy.json
 *.DS_Store
 .vercel
 vercel.json
+
+main.py
