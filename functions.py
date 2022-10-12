@@ -4,7 +4,7 @@ from datetime import datetime
 import pytz
 
 # ** ENSURE THESE CONSTANTS ARE UP TO DATE **
-CURRENT_SEASON = '20212022'
+CURRENT_SEASON = '20222023'
 
 # east, west
 TEAMS_IN_CONFERENCE = [16, 16]
@@ -358,7 +358,7 @@ def teamSchedule(team, timeZone, season = CURRENT_SEASON):
 # gets standings data (including wins, losses, etc.), gets from given season, if none given, defaults to current
 def getStandings(season = CURRENT_SEASON):
 
-    season = "20212022"
+    # season = "20212022"
 
     url = f"https://statsapi.web.nhl.com/api/v1/standings?season={season}"
 

@@ -18,7 +18,7 @@ def index():
 @app.route("/playerSearch", methods = ['GET', 'POST'])
 def player_Search():
 
-    curSeason = "20212022"
+    curSeason = CURRENT_SEASON
 
     if request.method == "GET":
         # print("current season: {}".format(CURRENT_SEASON))

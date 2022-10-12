@@ -11,7 +11,7 @@ The NHL DB website allows users to access data provided by the NHL API, such as 
 
 The purpose of this website is to allow access to various NHL statistics in a simple, intuitive, and user-friendly way. I felt that most other stat-aggregation sites were too busy and overwhelming and I wanted to create a solution for both myself, and other hockey fans who felt the same way. 
 
-Technologies Used: Python, HTML, CSS, Flask
+Technologies Used: Python, HTML, CSS, Flask, REST API
 
 <br>
 
