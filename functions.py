@@ -192,8 +192,8 @@ def peopleInfo(id):
     info['positionType'] = data['people'][0]['primaryPosition']['type']
     info['positionAbbreviation'] = data['people'][0]['primaryPosition']['abbreviation']
 
-    if info['fullName'] == "Tim Stützle":
-        info['fullName'] = "Tim 'Pentagon' Stützle"
+    # if info['fullName'] == "Tim Stützle":
+    #     info['fullName'] = "Tim 'Pentagon' Stützle"
 
     return info
 
