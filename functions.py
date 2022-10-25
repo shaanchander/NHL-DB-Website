@@ -24,8 +24,8 @@ TEAM_IDS_LONG = {"Anaheim Ducks":24, "Arizona Coyotes":53, "Boston Bruins":6, "B
 # takes in player info, returns id, if no player is found, returns 0
 def playerSearch(fName, lName, team = '0'):
 
-    # fName = fName.lower()
-    # lName = lName.lower()
+    fName = fName.lower()
+    lName = lName.lower()
 
     url = f'https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/{fName} {lName}'
 
