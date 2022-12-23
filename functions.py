@@ -71,6 +71,7 @@ def playerStats(id, season = CURRENT_SEASON):
         for i in data['stats'][0]['splits'][0]['stat'].keys():
             playerInfo[i] = data['stats'][0]['splits'][0]['stat'][i]
     except IndexError:
+        
         playerInfo['goals'] = "-"
         playerInfo['assists'] = "-"
         playerInfo['points'] = "-"
@@ -400,3 +401,25 @@ def getStandings(season = CURRENT_SEASON):
 
     return info
 
+
+# takes in short team abbreviation, returns list of dicts of stats (0 -> actual numbers, 1 -> relative position (eg. 13th))
+def teamStats(team):
+
+    teamid = TEAM_IDS_SHORT[team]
+
+    url = f"https://statsapi.web.nhl.com/api/v1/teams/{teamid}/stats"
+
+    response = requests.get(url)
+
+    if response.status_code != 200:
+        return response.status_code
+
+    data = response.json()
+
+    info = [{},{}]
+
+    for i in [0, 1]:
+        for j in data['stats'][i]['splits'][0]['stat'].keys():
+            info[i][j] = data['stats'][i]['splits'][0]['stat'][j]
+
+    return info

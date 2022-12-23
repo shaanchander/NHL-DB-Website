@@ -1,16 +1,16 @@
 import sys
 from functions import *
 
-id = playerSearch("josh", "norris", "OTT")
+# id = playerSearch("josh", "norris", "OTT")
 
-print(id)
+# print(id)
 
-stats = playerStats(id, "20212022")
+# stats = playerStats(id, "20212022")
 
-if stats != None:
-    print(stats['goals'])
-else:
-    print("Error: playerStats returned 'None'")
+# if stats != None:
+#     print(stats['goals'])
+# else:
+#     print("Error: playerStats returned 'None'")
 
 # print(peopleInfo(id))
 
@@ -18,7 +18,7 @@ else:
 
 # temp1 = teamSchedule("Ottawa Senators", "EST")
 
-standings = getStandings("20212022")
+# standings = getStandings("20212022")
 
 # print(standings)
 
@@ -28,16 +28,16 @@ standings = getStandings("20212022")
 
 # print(sys.getrecursionlimit())
 
-leagueSortedStandings = [{} for _ in range(TEAMS_IN_LEAGUE)]
+# leagueSortedStandings = [{} for _ in range(TEAMS_IN_LEAGUE)]
 
 # sorts standings over whole league
-for i in range(1, TEAMS_IN_LEAGUE):
-    for j in range(TEAMS_IN_LEAGUE):
-        print(f"i = {i} -- rank = {standings[j]['leagueRank']}\n")
-        if int(standings[j]['leagueRank']) == int(i):
-            leagueSortedStandings[i] = standings[j]
-            print(f"applied\n")
-            break
+# for i in range(1, TEAMS_IN_LEAGUE):
+#     for j in range(TEAMS_IN_LEAGUE):
+#         print(f"i = {i} -- rank = {standings[j]['leagueRank']}\n")
+#         if int(standings[j]['leagueRank']) == int(i):
+#             leagueSortedStandings[i] = standings[j]
+#             print(f"applied\n")
+#             break
 
 # for m in range(len(leagueSortedStandings)):
 #     print(f"{leagueSortedStandings[m]}\n\n")
@@ -47,5 +47,11 @@ for i in range(1, TEAMS_IN_LEAGUE):
 
 # leagueSortedStandings[0] = standings[0]
 
-for g in range(1, 31):
-    print(leagueSortedStandings[g]['wins'])
+# for g in range(1, 31):
+#     print(leagueSortedStandings[g]['wins'])
+
+tStats = teamStats("WIN")
+
+print(tStats[1]['powerPlayPercentage'])
+
+# print(tStats['stats'][1]['splits'][0]['stat']['powerPlayPercentage'])
