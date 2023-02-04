@@ -77,13 +77,12 @@ def team_Search():
     # gets team info
     team_info = teamInfo(team)
     team_roster = teamRoster(team)
+    team_stats = teamStats(team)
+    
 
     # get each player's stats
 
-    return render_template("teamInfo.html", teamInfo = team_info, teamRoster = team_roster)
-
-
-
+    return render_template("teamInfo.html", teamInfo = team_info, teamRoster = team_roster, teamStats = team_stats)
 
 
 @app.route("/scheduleSearch", methods = ['GET', 'POST'])
