@@ -254,8 +254,8 @@ def teamRoster(team):
         info[i]['name'] = data['roster'][i]['person']['fullName']
 
         # just because why not
-        if info[i]['name'] == "Tim Stützle":
-            info[i]['name'] = "Tim 'Pentagon' Stützle"
+        # if info[i]['name'] == "Tim Stützle":
+        #     info[i]['name'] = "Tim 'Pentagon' Stützle"
 
         # gets number, if none, puts '-'
         try:
