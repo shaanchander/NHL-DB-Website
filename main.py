@@ -52,8 +52,12 @@ from functions import *
 # for g in range(1, 31):
 #     print(leagueSortedStandings[g]['wins'])
 
-tStats = teamStats("WIN")
+# tStats = teamStats("WIN")
 
-print(tStats[1]['powerPlayPercentage'])
+# print(tStats[1]['powerPlayPercentage'])
 
 # print(tStats['stats'][1]['splits'][0]['stat']['powerPlayPercentage'])
+
+temp = FullTeamStats()
+
+print(temp[1]['powerPlayPercentage'])

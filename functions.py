@@ -18,6 +18,7 @@ TEAM_IDS_SHORT = {"ANA":24, "ARI":53, "BOS":6, "BUF":7, "CGY":20, "CAR":12, "CHI
 
 TEAM_IDS_LONG = {"Anaheim Ducks":24, "Arizona Coyotes":53, "Boston Bruins":6, "Buffalo Sabres":7, "Calgary Flames":20, "Carolina Hurricanes":12, "Chicago Blackhawks":16, "Colorado Avalanche":21, "Columbus Blue Jackets":29, "Dallas Stars":25, "Detroit Red Wings":17, "Edmonton Oilers":22, "Florida Panthers":13, "Los Angeles Kings":26, "Minnesota Wild":30, "Montréal Canadiens":8, "Nashville Predators":18, "New Jersey Devils":1, "New York Islanders":2, "New York Rangers":3, "Ottawa Senators":9, "Philadelphia Flyers":4, "Pittsburgh Penguins":5, "San Jose Sharks":28, "Seattle Kraken":55, "St. Louis Blues":19, "Tampa Bay Lightning":14, "Toronto Maple Leafs":10, "Vancouver Canucks":23, "Vegas Golden Knights":54, "Washington Capitals":15, "Winnipeg Jets":52}
 
+VALID_TEAM = 'ANA'
 
 # TEAM_IDS = [1,2,3,4,5,6,7,8,9,10,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,28,29,30,52,53,54]
 
@@ -375,6 +376,7 @@ def getStandings(season = CURRENT_SEASON):
     # initializes list of dicts
     info = [{} for _ in range(TEAMS_IN_LEAGUE)]
 
+
     # gets info for each team in each division
     for i in range(len(data['records'])):
         for j in range(len(data['records'][i]['teamRecords'])):
@@ -402,7 +404,7 @@ def getStandings(season = CURRENT_SEASON):
     return info
 
 
-# takes in short team abbreviation, returns list of dicts of stats (0 -> actual numbers, 1 -> relative position (eg. 13th))
+# takes in short team abbreviation, returns list of dicts of stats (0 -> actual numbers, 1 -> relative position (eg. 13))
 def teamStats(team):
 
     teamid = TEAM_IDS_SHORT[team]
@@ -420,6 +422,47 @@ def teamStats(team):
 
     for i in [0, 1]:
         for j in data['stats'][i]['splits'][0]['stat'].keys():
-            info[i][j] = data['stats'][i]['splits'][0]['stat'][j]
+            # if adding a ranking (ex. 16th), only add numerical placement as int, else just add it
+            if i:
+                placementStr = data['stats'][i]['splits'][0]['stat'][j]
+                info[i][j] = int(''.join(c for c in placementStr if c.isdigit()))
+            else:
+                info[i][j] = data['stats'][i]['splits'][0]['stat'][j]
 
     return info
+
+
+# takes in nothing (gets current season from const), returns teamStats for all teams (list of dicts)
+# sorted by rank
+# If wanting 3rd place PK value, then you'd do 'variable[2]['penaltyKill']['value']' - indicies go from 0 to 31 (n = n-1)
+def FullTeamStats():
+
+    numTeams = 0
+
+    temp = teamStats(VALID_TEAM)
+
+    # what the value is called converted to what the rank is called (since these are different) (sometimes they use pct vs pctg)
+    statNames = {'savePctRank': 'savePctg', 'shootingPctRank': 'shootingPctg'}
+
+    # for sorted data
+    # dict with 26 values with length 32 lists in them
+    
+    # info = [{} for _ in range(TEAMS_IN_LEAGUE)]
+    info = [{} for n in range(TEAMS_IN_LEAGUE)]
+
+    # had to fill spot 0 so I could use the ranking as the index
+    # info[0]['filler'] = {'filler': 2}
+
+    # gets stats for each team
+    for i in TEAM_IDS_SHORT.keys():
+        singleTeamStats = teamStats(i)
+
+        for j in singleTeamStats[1].keys():
+            if j not in ['penaltyKillOpportunities'] and j not in statNames.keys():
+                info[singleTeamStats[1][j] - 1][j] = {'value': singleTeamStats[0][j], 'teamID': TEAM_IDS_SHORT[i]}
+            elif j in statNames.keys():
+                info[singleTeamStats[1][j] - 1][j] = {'value': singleTeamStats[0][statNames[j]], 'teamID': TEAM_IDS_SHORT[i]}
+            
+
+    return info
+    
