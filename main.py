@@ -58,6 +58,6 @@ from functions import *
 
 # print(tStats['stats'][1]['splits'][0]['stat']['powerPlayPercentage'])
 
-temp = FullTeamStats()
+temp = fullTeamStats()
 
 print(temp[1]['powerPlayPercentage'])

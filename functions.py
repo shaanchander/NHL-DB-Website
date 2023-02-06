@@ -18,6 +18,8 @@ TEAM_IDS_SHORT = {"ANA":24, "ARI":53, "BOS":6, "BUF":7, "CGY":20, "CAR":12, "CHI
 
 TEAM_IDS_LONG = {"Anaheim Ducks":24, "Arizona Coyotes":53, "Boston Bruins":6, "Buffalo Sabres":7, "Calgary Flames":20, "Carolina Hurricanes":12, "Chicago Blackhawks":16, "Colorado Avalanche":21, "Columbus Blue Jackets":29, "Dallas Stars":25, "Detroit Red Wings":17, "Edmonton Oilers":22, "Florida Panthers":13, "Los Angeles Kings":26, "Minnesota Wild":30, "Montréal Canadiens":8, "Nashville Predators":18, "New Jersey Devils":1, "New York Islanders":2, "New York Rangers":3, "Ottawa Senators":9, "Philadelphia Flyers":4, "Pittsburgh Penguins":5, "San Jose Sharks":28, "Seattle Kraken":55, "St. Louis Blues":19, "Tampa Bay Lightning":14, "Toronto Maple Leafs":10, "Vancouver Canucks":23, "Vegas Golden Knights":54, "Washington Capitals":15, "Winnipeg Jets":52}
 
+REV_TEAM_IDS_LONG = {24: "Anaheim Ducks", 53: "Arizona Coyotes", 6: "Boston Bruins", 7: "Buffalo Sabres", 20: "Calgary Flames", 12: "Carolina Hurricanes", 16: "Chicago Blackhawks", 21: "Colarado Avalanche", 29: "Columbus Blue Jackets", 25: "Dallas Stars", 17: "Detroit Red Wings", 22: "Edmonton Oilers", 13: "Florida Panthers", 26: "Los Angeles Kings", 30: "Minnesota Wild", 8: "Montréal Canadiens", 18: "Nashville Predators", 1: "New Jersey Devils", 2: "New York Islanders", 3: "New York Rangers", 9: "Ottawa Senators", 4: "Philadelphia Flyers", 5: "Pittsbirgh Penguins", 28: "San Jose Sharks", 55: "Seattle Kraken", 19: "St. Louis Blues", 14: "Tampa Bay Lightning", 10: "Toronto Maple Leafs", 23: "Vancouver Canucks", 54: "Vegas Golden Knights", 15: "Washington Capitals", 52: "Winnipeg Jets"}
+
 VALID_TEAM = 'ANA'
 
 # TEAM_IDS = [1,2,3,4,5,6,7,8,9,10,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,28,29,30,52,53,54]
@@ -207,7 +209,7 @@ def teamInfo(team):
 
     if len(team) == 3:
         teamID = TEAM_IDS_SHORT[team]
-    else:
+    elif len(team) > 3:
         teamID = TEAM_IDS_LONG[team]
 
     teamUrl = f"https://statsapi.web.nhl.com/api/v1/teams/{teamID}/"
@@ -405,7 +407,8 @@ def getStandings(season = CURRENT_SEASON):
 
 
 # takes in short team abbreviation, returns list of dicts of stats (0 -> actual numbers, 1 -> relative position (eg. 13))
-def teamStats(team):
+# other argument decides whether to remove ending (ex. 'th') from ranking, 0 -> 16, 1 -> 16th, defaults to none
+def teamStats(team, boolOrdinal=0):
 
     teamid = TEAM_IDS_SHORT[team]
 
@@ -423,7 +426,7 @@ def teamStats(team):
     for i in [0, 1]:
         for j in data['stats'][i]['splits'][0]['stat'].keys():
             # if adding a ranking (ex. 16th), only add numerical placement as int, else just add it
-            if i:
+            if i and not boolOrdinal:
                 placementStr = data['stats'][i]['splits'][0]['stat'][j]
                 info[i][j] = int(''.join(c for c in placementStr if c.isdigit()))
             else:
@@ -435,7 +438,7 @@ def teamStats(team):
 # takes in nothing (gets current season from const), returns teamStats for all teams (list of dicts)
 # sorted by rank
 # If wanting 3rd place PK value, then you'd do 'variable[2]['penaltyKill']['value']' - indicies go from 0 to 31 (n = n-1)
-def FullTeamStats():
+def fullTeamStats():
 
     numTeams = 0
 
@@ -459,10 +462,13 @@ def FullTeamStats():
 
         for j in singleTeamStats[1].keys():
             if j not in ['penaltyKillOpportunities'] and j not in statNames.keys():
-                info[singleTeamStats[1][j] - 1][j] = {'value': singleTeamStats[0][j], 'teamID': TEAM_IDS_SHORT[i]}
+                info[singleTeamStats[1][j] - 1][j] = {'value': singleTeamStats[0][j], 'teamID': int(TEAM_IDS_SHORT[i])}
+
+                if j in ['powerPlayGoals', 'powerPlayOpportunities']:
+                    info[singleTeamStats[1][j] - 1][j]['value'] = int(info[singleTeamStats[1][j] - 1][j]['value'])
+
             elif j in statNames.keys():
-                info[singleTeamStats[1][j] - 1][j] = {'value': singleTeamStats[0][statNames[j]], 'teamID': TEAM_IDS_SHORT[i]}
-            
+                info[singleTeamStats[1][j] - 1][statNames[j]] = {'value': singleTeamStats[0][statNames[j]], 'teamID': int(TEAM_IDS_SHORT[i])}
 
     return info
     
