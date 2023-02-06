@@ -77,7 +77,7 @@ def team_Search():
     # gets team info
     team_info = teamInfo(team)
     team_roster = teamRoster(team)
-    team_stats = teamStats(team)
+    team_stats = teamStats(team, 1)
     
 
     # get each player's stats
@@ -190,3 +190,8 @@ def standings():
     divisionSortedStandings = [atlantic, metro, central, pacific]
 
     return render_template("standings.html", leagueStandings = leagueSortedStandings, conferenceStandings = conferenceSortedStandings, divisionStandings = divisionSortedStandings)
+
+@app.route("/teamStats", methods = ['GET'])
+def team_Stats():
+
+    return render_template("teamStats.html", full_team_stats = fullTeamStats(), REV_TEAM_IDS_LONG = REV_TEAM_IDS_LONG)

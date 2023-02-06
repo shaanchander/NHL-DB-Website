@@ -38,3 +38,7 @@ body {
 .standingsTitles {
     font-size: 60px;
 }
+
+.table-striped {
+    padding-top: 10px !important;
+}
