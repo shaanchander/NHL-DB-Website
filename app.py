@@ -60,6 +60,7 @@ def player_Search():
 
     # creates link for player image
     link = f"http://nhl.bamcontent.com/images/headshots/current/168x168/{id}.jpg"
+    #link = f"https://assets.nhle.com/mugs/nhl/{stats[-1]['seasonStartYear']}{stats[-1]['seasonEndYear']}/{REV_TEAM_IDS_SHORT[TEAM_IDS_LONG[stats[-1]['team']]]}/{id}.png"
 
     return render_template("playerInfo.html", info = stats, person = pInfo, imgLink = link)
 
