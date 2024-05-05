@@ -4,7 +4,7 @@ from datetime import datetime
 import pytz
 
 # ** ENSURE THESE CONSTANTS ARE UP TO DATE **
-CURRENT_SEASON = '20222023'
+CURRENT_SEASON = '20232024'
 
 # east, west
 TEAMS_IN_CONFERENCE = [16, 16]
@@ -14,11 +14,13 @@ TEAMS_IN_DIV = [8, 8, 8, 8]
 
 TEAMS_IN_LEAGUE = 32
 
-TEAM_IDS_SHORT = {"ANA":24, "ARI":53, "BOS":6, "BUF":7, "CGY":20, "CAR":12, "CHI":16, "COL":21, "CBJ":29, "DAL":25, "DET":17, "EDM":22, "FLA":13, "LAK":26, "MIN":30, "MTL":8, "NSH":18, "NJD":1, "NYI":2, "NYR":3, "OTT":9, "PHI":4, "PIT":5, "SJS":28, "SEA":55, "STL":19, "TBL":14, "TOR":10, "VAN":23, "VGK":54, "WSH":15, "WIN":52}
+TEAM_IDS_SHORT = {"ANA":24, "ARI":53, "BOS":6, "BUF":7, "CGY":20, "CAR":12, "CHI":16, "COL":21, "CBJ":29, "DAL":25, "DET":17, "EDM":22, "FLA":13, "LAK":26, "MIN":30, "MTL":8, "NSH":18, "NJD":1, "NYI":2, "NYR":3, "OTT":9, "PHI":4, "PIT":5, "SJS":28, "SEA":55, "STL":19, "TBL":14, "TOR":10, "VAN":23, "VGK":54, "WSH":15, "WPG":52}
 
 TEAM_IDS_LONG = {"Anaheim Ducks":24, "Arizona Coyotes":53, "Boston Bruins":6, "Buffalo Sabres":7, "Calgary Flames":20, "Carolina Hurricanes":12, "Chicago Blackhawks":16, "Colorado Avalanche":21, "Columbus Blue Jackets":29, "Dallas Stars":25, "Detroit Red Wings":17, "Edmonton Oilers":22, "Florida Panthers":13, "Los Angeles Kings":26, "Minnesota Wild":30, "Montréal Canadiens":8, "Nashville Predators":18, "New Jersey Devils":1, "New York Islanders":2, "New York Rangers":3, "Ottawa Senators":9, "Philadelphia Flyers":4, "Pittsburgh Penguins":5, "San Jose Sharks":28, "Seattle Kraken":55, "St. Louis Blues":19, "Tampa Bay Lightning":14, "Toronto Maple Leafs":10, "Vancouver Canucks":23, "Vegas Golden Knights":54, "Washington Capitals":15, "Winnipeg Jets":52}
 
 REV_TEAM_IDS_LONG = {24: "Anaheim Ducks", 53: "Arizona Coyotes", 6: "Boston Bruins", 7: "Buffalo Sabres", 20: "Calgary Flames", 12: "Carolina Hurricanes", 16: "Chicago Blackhawks", 21: "Colarado Avalanche", 29: "Columbus Blue Jackets", 25: "Dallas Stars", 17: "Detroit Red Wings", 22: "Edmonton Oilers", 13: "Florida Panthers", 26: "Los Angeles Kings", 30: "Minnesota Wild", 8: "Montréal Canadiens", 18: "Nashville Predators", 1: "New Jersey Devils", 2: "New York Islanders", 3: "New York Rangers", 9: "Ottawa Senators", 4: "Philadelphia Flyers", 5: "Pittsbirgh Penguins", 28: "San Jose Sharks", 55: "Seattle Kraken", 19: "St. Louis Blues", 14: "Tampa Bay Lightning", 10: "Toronto Maple Leafs", 23: "Vancouver Canucks", 54: "Vegas Golden Knights", 15: "Washington Capitals", 52: "Winnipeg Jets"}
+
+REV_TEAM_IDS_SHORT = {24: 'ANA', 53: 'ARI', 6: 'BOS', 7: 'BUF', 20: 'CGY', 12: 'CAR', 16: 'CHI', 21: 'COL', 29: 'CBJ', 25: 'DAL', 17: 'DET', 22: 'EDM', 13: 'FLA', 26: 'LAK', 30: 'MIN', 8: 'MTL', 18: 'NSH', 1: 'NJD', 2: 'NYI', 3: 'NYR', 9: 'OTT', 4: 'PHI', 5: 'PIT', 28: 'SJS', 55: 'SEA', 19: 'STL', 14: 'TBL', 10: 'TOR', 23: 'VAN', 54: 'VGK', 15: 'WSH', 52: 'WPG'}
 
 VALID_TEAM = 'ANA'
 
@@ -125,9 +127,9 @@ def allPlayerStats(id):
         # playerInfo[i]['season'] = data['stats'][0]['splits'][i]['season']
 
         # formats season
-        temp1 = data['stats'][0]['splits'][i]['season'][:4]
-        temp2 = data['stats'][0]['splits'][i]['season'][4:]
-        playerInfo[i]['season'] = f"{temp1} - {temp2}"
+        playerInfo[i]['seasonStartYear'] = data['stats'][0]['splits'][i]['season'][:4]
+        playerInfo[i]['seasonEndYear'] = data['stats'][0]['splits'][i]['season'][4:]
+        playerInfo[i]['season'] = f"{playerInfo[i]['seasonStartYear']} - {playerInfo[i]['seasonEndYear']}"
 
         # gets league and team names
         playerInfo[i]['team'] = data['stats'][0]['splits'][i]['team']['name']

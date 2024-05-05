@@ -2,6 +2,17 @@
 
 {% block title %}Player Info{% endblock %}
 
+{% block head %}
+
+    <style>
+        #headshot {
+            border-radius: 11rem;
+            padding: 0%;
+        }
+    </style>
+
+{% endblock %}
+
 {% block main %}
 
     <!-- <p>Games Played: {{ info['games'] }}</p>
@@ -10,18 +21,25 @@
     <p>Points: {{ info['points'] }}</p>
     <p>Plus-Minus: {{ info['plusMinus'] }}</p> -->
 
-    <img src="{{ imgLink }}" class="img-thumbnail float-start ms-5" alt="player headshot">
-
-    <h1 id = "pName">{{ person['fullName'] }} #{{ person['primaryNumber'] }}</h1>
-    <h4 >{{ person['birthInfo'] }}</h4>
-    <h4>{{ person['birthDate'] }} (Age {{ person['currentAge'] }})</h4>
-    <h4>Height: {{ person['height'] }} - Weight: {{ person['weight'] }} lbs</h4>
-    <h4>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;{{ person['positionName'] }} - Shoots: {{ person['shootsCatches'] }}</h4>
-    {% if person['teamName'] %}
-    <h4>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Current Team: {{ person['teamName'] }}</h4>
-    {% endif %}
-    <!-- <h1 id = "pNumber">#{{ person['primaryNumber'] }}</h1> -->
-
+    <div class = "container">
+        <div class = "col">
+            <img src="{{ imgLink }}" class="img-thumbnail float-start ms-5"  id = "headshot" alt="player headshot">
+        </div>
+        
+        <div class = "col">
+            <h1 id = "pName">{{ person['fullName'] }} #{{ person['primaryNumber'] }}</h1>
+            <h4 >{{ person['birthInfo'] }}</h4>
+            <h4>{{ person['birthDate'] }} (Age {{ person['currentAge'] }})</h4>
+            <h4>Height: {{ person['height'] }} - Weight: {{ person['weight'] }} lbs</h4>
+            <h4>{{ person['positionName'] }} - Shoots: {{ person['shootsCatches'] }}</h4>
+            {% if person['teamName'] %}
+            <h4>Current Team: {{ person['teamName'] }}</h4>
+            {% endif %}
+    
+            <!-- <h1 id = "pNumber">#{{ person['primaryNumber'] }}</h1> -->
+        </div>
+    </div>
+   
     <br>
 
     <table class="table table-striped">

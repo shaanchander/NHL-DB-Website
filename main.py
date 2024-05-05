@@ -58,6 +58,13 @@ from functions import *
 
 # print(tStats['stats'][1]['splits'][0]['stat']['powerPlayPercentage'])
 
-temp = fullTeamStats()
+# temp = fullTeamStats()
 
-print(temp[1]['powerPlayPercentage'])
+# print(temp[1]['powerPlayPercentage'])
+
+temp = {}
+
+for i in TEAM_IDS_SHORT.keys():
+    temp[TEAM_IDS_SHORT[i]] = i
+
+print(temp)
