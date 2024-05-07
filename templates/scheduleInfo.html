@@ -4,14 +4,9 @@
 
 {% block main %}
 
-    <img src="{{ teamInfo['logoUrl'] }}" class="float-start ms-5" alt="team logo" width = 800 height = 250>
-
+   
     <div class = "text-start">
-        <h1 id = "teamName" class="fw-bold text-start ms-5">{{ teamInfo['teamName'] }}</h1>
-        <a href="{{ teamInfo['officialSiteUrl'] }}" class = "fs-4">Official Team Website</a>
-        <h4>Arena: {{ teamInfo['venueName'] }}</h4>
-        <h4>Conference: {{ teamInfo['conferenceName'] }}</h4>
-        <h4>Division: {{ teamInfo['divName'] }}</h4>
+       
     </div>
     <br> <br>    
 
@@ -29,9 +24,8 @@
                     </tr>
                 </thead>
                 <tbody>
-    
                     {% for i in teamSchedule %}
-                        {% if i['gameType'] == "PR" and i['gameStatus'] == "Scheduled" %}
+                        {% if i['gameType'] == 1 and i['gameStatus'] == "FUT" %}
                             <tr>
                                 <!-- <th scope = "row">{{ rowNum }}</th> -->
                                 <td>{{ i['gameDate'] }}</td>
@@ -59,7 +53,7 @@
                 <tbody>
     
                     {% for i in teamSchedule %}
-                        {% if i['gameType'] == "R" and i['gameStatus'] == "Scheduled" %}
+                        {% if i['gameType'] == 2 and i['gameStatus'] == "FUT" %}
                             <tr>
                                 <!-- <th scope = "row">{{ rowNum }}</th> -->
                                 <td>{{ i['gameDate'] }}</td>
@@ -88,7 +82,7 @@
             <tbody>
 
                 {% for i in teamSchedule %}
-                    {% if i['gameType'] == "P" and i['gameStatus'] == "Scheduled" %}
+                    {% if i['gameType'] == 3 and i['gameStatus'] == "FUT" %}
                         <tr>
                             <!-- <th scope = "row">{{ rowNum }}</th> -->
                             <td>{{ i['gameDate'] }}</td>

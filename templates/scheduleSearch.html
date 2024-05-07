@@ -13,7 +13,7 @@
                 <select name="team" class="form-select" aria-label="Default select example">
                     <option selected value='0'>Team</option>
                     {% for i in range(32) %}
-                        <option value="{{ TEAMS_LONG[i] }}">{{ TEAMS_LONG[i] }}</option>
+                        <option value="{{ TEAMS_SHORT[i] }}">{{ TEAMS_LONG[i] }}</option>
                     {% endfor %}
                 </select>
 
@@ -21,7 +21,7 @@
                 <select name="matchup" class="form-select" aria-label="Default select example">
                     <option selected value='0'>Team</option>
                     {% for i in range(32) %}
-                        <option value="{{ TEAMS_LONG[i] }}">{{ TEAMS_LONG[i] }}</option>
+                        <option value="{{ TEAMS_SHORT[i] }}">{{ TEAMS_LONG[i] }}</option>
                     {% endfor %}
                 </select>
                 

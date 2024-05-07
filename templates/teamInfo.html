@@ -35,12 +35,12 @@
                 {% set rowNum = 1 %}
 
                 {% for i in teamRoster %}
-                    {% if i['positionAbbreviation'] in ["RW", "C", "LW"] %}
+                    {% if i['position'] in ["R", "C", "L"] %}
                         <tr>
                             <!-- <th scope = "row">{{ rowNum }}</th> -->
-                            <td>{{ i['name'] }}</td>
-                            <td>{{ i['positionAbbreviation'] }}</td>
-                            <td>{{ i['number'] }}</td>
+                            <td>{{ i['fullName'] }}</td>
+                            <td>{{ i['position'] }}</td>
+                            <td>{{ i['sweaterNumber'] }}</td>
                             <td>{{ i['stats']['goals'] }}</td>
                             <td>{{ i['stats']['assists'] }}</td>
                             <td>{{ i['stats']['points'] }}</td>
@@ -68,11 +68,11 @@
                 {% set rowNum = 1 %}
 
                 {% for i in teamRoster %}
-                    {% if i['positionAbbreviation'] in ["D"] %}
+                    {% if i['position'] in ["D"] %}
                         <tr>
                             <!-- <th scope = "row">{{ rowNum }}</th> -->
                             <td>{{ i['name'] }}</td>
-                            <td>{{ i['positionAbbreviation'] }}</td>
+                            <td>{{ i['position'] }}</td>
                             <td>{{ i['number'] }}</td>
                             <td>{{ i['stats']['goals'] }}</td>
                             <td>{{ i['stats']['assists'] }}</td>
@@ -100,11 +100,11 @@
             {% set rowNum = 1 %}
 
             {% for i in teamRoster %}
-                {% if i['positionAbbreviation'] in ["G"] %}
+                {% if i['position'] in ["G"] %}
                     <tr>
                         <!-- <th scope = "row">{{ rowNum }}</th> -->
                         <td>{{ i['name'] }}</td>
-                        <td>{{ i['positionAbbreviation'] }}</td>
+                        <td>{{ i['position'] }}</td>
                         <td>{{ i['number'] }}</td>
                         <td>{{ i['stats']['savePercentage'] }}</td>
                         <td>{{ i['stats']['goalAgainstAverage'] }}</td>

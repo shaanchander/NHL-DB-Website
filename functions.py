@@ -1,6 +1,6 @@
 from flask import render_template
 import requests
-from datetime import datetime
+from datetime import datetime, date
 import pytz
 
 # ** ENSURE THESE CONSTANTS ARE UP TO DATE **
@@ -11,6 +11,7 @@ TEAMS_IN_CONFERENCE = [16, 16]
 
 # atlantic, metro, central, pacific
 TEAMS_IN_DIV = [8, 8, 8, 8]
+DIV_NAMES = ['Atlantic', 'Metropolitan', 'Central', 'Pacific']
 
 TEAMS_IN_LEAGUE = 32
 
@@ -26,13 +27,24 @@ VALID_TEAM = 'ANA'
 
 # TEAM_IDS = [1,2,3,4,5,6,7,8,9,10,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,28,29,30,52,53,54]
 
+POSITION_CONV = {'G': 'Goalie', 'L': 'Left Wing', 'R': 'Right Wing', 'C': 'Centre', 'D': 'Defenseman'}
+
+
+
+#TODO
+
+# Use '/now' instead of CURRENT_SEASON
+
+
+
 # takes in player info, returns id, if no player is found, returns 0
 def playerSearch(fName, lName, team = '0'):
 
     fName = fName.lower()
     lName = lName.lower()
 
-    url = f'https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/{fName} {lName}'
+    # url = f'https://suggest.svc.nhl.com/svc/suggest/v1/minplayers/{fName} {lName}'
+    url = f'https://search.d3.nhle.com/api/v1/search/player?culture=en-us&limit=20&q={fName} {lName}'
 
     response = requests.get(url)
 
@@ -41,26 +53,43 @@ def playerSearch(fName, lName, team = '0'):
 
     data = response.json()
 
-    for i in range(len(data['suggestions'])):
-        data['suggestions'][i] = data['suggestions'][i].split('|')
+    # for i in range(len(data['suggestions'])):
+    #     data['suggestions'][i] = data['suggestions'][i].split('|')
 
-    # doesn't filter by team if one isn't provided
+    # # doesn't filter by team if one isn't provided
+    # if team == '0':
+    #     for i in range(len(data['suggestions'])):
+    #         data['suggestions'][i][11] = '0'
+
+    # # checks list of returned players, returning the ID of the one with the same fName, lName, and team (if provided) as passed into the function
+    # for i in range(len(data['suggestions'])):
+    #     if data['suggestions'][i][2].lower() == fName and data['suggestions'][i][1].lower() == lName and team == data['suggestions'][i][11]:
+    #         return data['suggestions'][i][0]
+
+    # if not team specific search
     if team == '0':
-        for i in range(len(data['suggestions'])):
-            data['suggestions'][i][11] = '0'
+        for i in data:
+            print(i['name'])
+            if i['name'].replace(' ', '').lower() == f"{fName}{lName}".replace(' ', '').lower():
+                return i['playerId']
 
-    # checks list of returned players, returning the ID of the one with the same fName, lName, and team (if provided) as passed into the function
-    for i in range(len(data['suggestions'])):
-        if data['suggestions'][i][2].lower() == fName and data['suggestions'][i][1].lower() == lName and team == data['suggestions'][i][11]:
-            return data['suggestions'][i][0]
+    # if specific team included in search      
+    else:
+        for i in data:
+            if i['name'] == f"{fName} {lName}" and team == i['teamAbbrev']:
+                return i['playerId']
 
     return 0
 
 
-# takes in player ID and the season (if not provided, defaults to current season), returns dict of stats
-def playerStats(id, season = CURRENT_SEASON):
+# takes in player ID and the season (if not provided, defaults to current season), returns dict of stats, returns list of lists from all entries matching given season (NHL, WJC, etc.)
+def playerStats(id, season = CURRENT_SEASON, gameType=2):
 
-    url = f"https://statsapi.web.nhl.com/api/v1/people/{id}/stats?stats=statsSingleSeason&season={season}"
+    # url = f"https://statsapi.web.nhl.com/api/v1/people/{id}/stats?stats=statsSingleSeason&season={season}"
+
+    seasonStats = []
+
+    url = f"https://api-web.nhle.com/v1/player/{id}/landing"
 
     response = requests.get(url)
 
@@ -69,108 +98,142 @@ def playerStats(id, season = CURRENT_SEASON):
 
     data = response.json()
 
-    playerInfo = {}
+    # print(len(data['seasonTotals']))
 
+    for i in data['seasonTotals']:
+
+        # print(str(season) + "      " + str(i['season']))
+        if str(i['season']) == str(season):
+            seasonStats.append(i)
+            # print("lets")
+            
+
+    playerInfo = []
+
+    # gameType ----  1 = prob preseson, 2 = regular season, 3 = playoffs
+    
     # if they don't have an id or stats? (some kind of error trapping)
-    try:
-        for i in data['stats'][0]['splits'][0]['stat'].keys():
-            playerInfo[i] = data['stats'][0]['splits'][0]['stat'][i]
-    except IndexError:
-        
-        playerInfo['goals'] = "-"
-        playerInfo['assists'] = "-"
-        playerInfo['points'] = "-"
-        playerInfo['plusMinus'] = "-"
+    # if i['gamesPlayed']:
+    #     playerInfo['goals'] = "-"
+    #     playerInfo['assists'] = "-"
+    #     playerInfo['points'] = "-"
+    #     playerInfo['plusMinus'] = "-"
 
-        playerInfo['savePercentage'] = "-"
-        playerInfo['goalAgainstAverage'] = "-"
+    #     playerInfo['savePercentage'] = "-"
+    #     playerInfo['goalAgainstAverage'] = "-"
 
-        return playerInfo
+    #     return playerInfo
+    
+    # TODO make this error trap with missing stats
 
-    try:
-        # playerInfo[i]['goalAgainstAverage'] = round(playerInfo[i]['goalAgainstAverage'], 2)
-        playerInfo['goalAgainstAverage'] =  "%0.2f" % round(float(playerInfo['goalAgainstAverage']), 2)
-        # playerInfo[i]['savePercentage'] =  "%0.3f" % round(playerInfo[i]['savePercentage'], 3)
+    # try:
+    #     # playerInfo[i]['goalAgainstAverage'] = round(playerInfo[i]['goalAgainstAverage'], 2)
+    #     playerInfo['goalAgainstAverage'] =  "%0.2f" % round(float(playerInfo['goalAgainstAverage']), 2)
+    #     # playerInfo[i]['savePercentage'] =  "%0.3f" % round(playerInfo[i]['savePercentage'], 3)
 
-        for k in ["goalAgainstAverge", "wins", "savePercentage"]:
-            if k not in playerInfo.keys():
-                playerInfo[k] = '-'
-            elif k == "savePercentage":
-                playerInfo['savePercentage'] =  "%0.3f" % round(playerInfo['savePercentage'], 3)
+    #     for k in ["goalAgainstAverge", "wins", "savePercentage"]:
+    #         if k not in playerInfo.keys():
+    #             playerInfo[k] = '-'
+    #         elif k == "savePercentage":
+    #             playerInfo['savePercentage'] =  "%0.3f" % round(playerInfo['savePercentage'], 3)
 
-        if playerInfo['savePercentage'][:3] == "0.0":
-            playerInfo['savePercentage'] = '-'
+    #     if playerInfo['savePercentage'][:3] == "0.0":
+    #         playerInfo['savePercentage'] = '-'
                 
-    # if they are a skater
-    except KeyError:
-        for k in ["games", "goals", "assists", "points", "plusMinus"]:
-            if k not in playerInfo.keys():
-                playerInfo[k] = '-'
+    # # if they are a skater
+    # except KeyError:
+    #     for k in ["games", "goals", "assists", "points", "plusMinus"]:
+    #         if k not in playerInfo.keys():
+    #             playerInfo[k] = '-'
+
+    # for each season with matching season as given
+    for i in seasonStats:
+
+        singleSeason = {}
+
+        # if goalie
+        if 'goalsAgainst' in i.keys():
+
+            for j in ['goalsAgainstAvg', 'savePctg', 'wins', 'gamesPlayed']:
+                try:
+                    singleSeason[j] = i[j]
+                except:
+                    singleSeason[j] = '-'
+
+            try:
+                singleSeason['savePctg'] = round(float(singleSeason['savePctg']), 3)
+            except:
+                pass
+
+            try:
+                singleSeason['goalsAgainstAvg'] = round(singleSeason['goalsAgainstAvg'], 2)
+            except:
+                pass
+
+        
+        # if skater (not goalie)
+        else:
+            for j in ['goals', 'assists', 'points', 'plusMinus', 'pim', 'gamesPlayed']:
+                try:
+                    singleSeason[j] = i[j]
+                except:
+                    singleSeason[j] = '-'
+
+        # formats season
+        singleSeason['seasonStartYear'] = str(i['season'])[:4]
+        singleSeason['seasonEndYear'] = str(i['season'])[4:]
+
+        # if given stats are playoffs
+        if i['gameTypeId'] == 3:
+            singleSeason['season'] = f"{singleSeason['seasonStartYear']} - {singleSeason['seasonEndYear']} (Playoffs)"
+        else:
+            singleSeason['season'] = f"{singleSeason['seasonStartYear']} - {singleSeason['seasonEndYear']}"
+
+
+        # gets league and team names
+        singleSeason['team'] = i['teamName']['default']
+        singleSeason['league'] = i['leagueAbbrev']
+
+        playerInfo.append(singleSeason)
 
     return playerInfo
 
+# takes in player id, returns list of list of dicts for stats from each season/league
 def allPlayerStats(id):
 
-    url = f"https://statsapi.web.nhl.com/api/v1/people/{id}/stats?stats=yearByYear"
+    # url = f"https://statsapi.web.nhl.com/api/v1/people/{id}/stats?stats=yearByYear"
+
+    url = f"https://api-web.nhle.com/v1/player/{id}/landing"
 
     response = requests.get(url)
 
     if response.status_code != 200:
         return 0
 
-    data = response.json()
+    data = response.json()['seasonTotals']
 
-    playerInfo = [{} for _ in range(len(data['stats'][0]['splits']))]
+    playerInfo = []
 
-    for i in range(len(data['stats'][0]['splits'])):
+    seasonLog = []
 
-        # playerInfo[i]['season'] = data['stats'][0]['splits'][i]['season']
+    for i in range(len(data)):
 
-        # formats season
-        playerInfo[i]['seasonStartYear'] = data['stats'][0]['splits'][i]['season'][:4]
-        playerInfo[i]['seasonEndYear'] = data['stats'][0]['splits'][i]['season'][4:]
-        playerInfo[i]['season'] = f"{playerInfo[i]['seasonStartYear']} - {playerInfo[i]['seasonEndYear']}"
+        if data[i]['season'] not in seasonLog:
 
-        # gets league and team names
-        playerInfo[i]['team'] = data['stats'][0]['splits'][i]['team']['name']
-        playerInfo[i]['league'] = data['stats'][0]['splits'][i]['league']['name']
+            temp = playerStats(id, data[i]['season'], data[i]['gameTypeId'])
 
-        # gets all other stats
-        for j in data['stats'][0]['splits'][i]['stat'].keys():
-            playerInfo[i][j] = data['stats'][0]['splits'][i]['stat'][j]
+            for entry in temp:
+                playerInfo.append(entry)
 
-        # if they are a goalie
-        try:
-            # playerInfo[i]['goalAgainstAverage'] = round(playerInfo[i]['goalAgainstAverage'], 2)
-            playerInfo[i]['goalAgainstAverage'] =  "%0.2f" % round(playerInfo[i]['goalAgainstAverage'], 2)
-            # playerInfo[i]['savePercentage'] =  "%0.3f" % round(playerInfo[i]['savePercentage'], 3)
-
-            for k in ["goalAgainstAverge", "wins", "savePercentage"]:
-                if k not in playerInfo[i].keys():
-                    playerInfo[i][k] = '-'
-                elif k == "savePercentage":
-                    playerInfo[i]['savePercentage'] =  "%0.3f" % round(playerInfo[i]['savePercentage'], 3)
-
-            if playerInfo[i]['savePercentage'][:3] == "0.0":
-                playerInfo[i]['savePercentage'] = '-'
-                    
-        # if they are a skater
-        except KeyError:
-            for k in ["games", "goals", "assists", "points", "plusMinus"]:
-                if k not in playerInfo[i].keys():
-                    playerInfo[i][k] = '-'
-
-    # fills empty stats with '-'
-    for i in range(len(playerInfo)):
-        for j in playerInfo[i].keys():
-            if playerInfo[i][j] == "":
-                playerInfo[i][j] = '-'
+            seasonLog.append(data[i]['season'])
 
     return playerInfo
 
 # gets player personal info
 def peopleInfo(id):
-    url = f"https://statsapi.web.nhl.com/api/v1/people/{id}"
+    # url = f"https://statsapi.web.nhl.com/api/v1/people/{id}"
+
+    url = f"https://api-web.nhle.com/v1/player/{id}/landing"
 
     response = requests.get(url)
 
@@ -181,22 +244,49 @@ def peopleInfo(id):
 
     info = {}
 
-    # gets 
-    for i in data['people'][0].keys():
-        if i not in ["currentTeam", "primaryPosition"]:
-            info[i] = data['people'][0][i]
+    for i in data.keys():
 
-    # tries to get team information
-    try:
-        info['teamID'] = data['people'][0]['currentTeam']['id']
-        info['teamName'] = data['people'][0]['currentTeam']['name']
-    except KeyError:
-        pass
+        if type(data[i]) != list and type(data[i]) != dict:
+            info[i] = data[i]
+
+        info['fullName'] = data['firstName']['default'] + " " + data['lastName']['default']
+
+        info['birthCity'] = data['birthCity']['default']
+        info['birthCountry'] = data['birthCountry']
+
+        info['birthDate'] = data['birthDate']
+
+        # info['birthLocationFull'] = f"{data['birthCity']['default']}, {data['birthCountry']}"
+
+        info['heightFull'] = f"{int(data['heightInInches']/12)}' {data['heightInInches'] % 12}\""
+
+        try:
+            info['teamName'] = data['fullTeamName']['default']
+        except:
+            pass
+
+        info['positionFull'] =  POSITION_CONV[data['position']]
+
+        today = date.today()
+
+        info['age'] = today.year - int(info['birthDate'].split('-')[0]) - ((today.month, today.day) < (int(info['birthDate'].split('-')[1]), int(info['birthDate'].split('-')[2]))) 
+
+    # # gets 
+    # for i in data['people'][0].keys():
+    #     if i not in ["currentTeam", "primaryPosition"]:
+    #         info[i] = data['people'][0][i]
+
+    # # tries to get team information
+    # try:
+    #     info['teamID'] = data['people'][0]['currentTeam']['id']
+    #     info['teamName'] = data['people'][0]['currentTeam']['name']
+    # except KeyError:
+    #     pass
 
     # gets position info
-    info['positionName'] = data['people'][0]['primaryPosition']['name']
-    info['positionType'] = data['people'][0]['primaryPosition']['type']
-    info['positionAbbreviation'] = data['people'][0]['primaryPosition']['abbreviation']
+    info['positionName'] = data['position']
+    # info['positionType'] = data['people'][0]['primaryPosition']['type']
+    # info['positionAbbreviation'] = data['people'][0]['primaryPosition']['abbreviation']
 
     # if info['fullName'] == "Tim Stützle":
     #     info['fullName'] = "Tim 'Pentagon' Stützle"
@@ -233,16 +323,18 @@ def teamInfo(team):
     info['divAbbreviation'] =  data['teams'][0]['division']['nameShort']
     info['conferenceName'] = data['teams'][0]['conference']['name']
     info['officialSiteUrl'] = data['teams'][0]['officialSiteUrl']
-    info['logoUrl'] = f"https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{teamID}.svg"
+    info['logoUrl'] = f"https://assets.nhle.com/logos/nhl/svg/{team}_light.svg"
 
     return info
 
 # gets team roster info
 def teamRoster(team):
 
-    teamID = TEAM_IDS_SHORT[team]
+    # teamID = TEAM_IDS_SHORT[team]
 
-    url = f"https://statsapi.web.nhl.com/api/v1/teams/{teamID}/roster"
+    # url = f"https://statsapi.web.nhl.com/api/v1/teams/{teamID}/roster"
+
+    url = f"https://api-web.nhle.com/v1/roster/{team}/current"
 
     response = requests.get(url)
 
@@ -252,30 +344,28 @@ def teamRoster(team):
     data = response.json()
 
     # creates list of dicts
-    info = [{} for _ in range(len(data['roster']))]
+    # info = [{} for _ in range(len(data['roster']))]
+    info = []
 
-    # for each roster player
-    for i in range(len(data['roster'])):
-        info[i]['name'] = data['roster'][i]['person']['fullName']
 
-        # just because why not
-        # if info[i]['name'] == "Tim Stützle":
-        #     info[i]['name'] = "Tim 'Pentagon' Stützle"
+    for position in data:
 
-        # gets number, if none, puts '-'
-        try:
-            info[i]['number'] = f"#{data['roster'][i]['jerseyNumber']}"
-        except KeyError:
-            info[i]['number'] = '-'
+        # for each roster player
+        for player in range(len(data[position])):
 
-        # gets remaining info
-        info[i]['id'] = data['roster'][i]['person']['id']
-        info[i]['positionName'] = data['roster'][i]['position']['name']
-        info[i]['positionType'] = data['roster'][i]['position']['type']
-        info[i]['positionAbbreviation'] = data['roster'][i]['position']['abbreviation']
 
-        # gets their player id
-        info[i]['stats'] = playerStats(info[i]['id'])
+            curPlayer = peopleInfo(data[position][player]['id'])
+            curPlayer['stats'] = playerStats(data[position][player]['id'])
+
+            # info.append(peopleInfo(data[position][player]['id'])['stats'].update(playerStats(data[position][player]['id'])))
+
+            info.append(curPlayer)
+
+            # print(player)
+
+            # just because why not
+            # if info[i]['name'] == "Tim Stützle":
+            #     info[i]['name'] = "Tim 'Pentagon' Stützle"
 
     return info
 
@@ -291,35 +381,31 @@ def teamSchedule(team, timeZone, season = CURRENT_SEASON):
         return render_template("error.html", message = "Team not Found")
 
     # gets team ID
-    teamID = TEAM_IDS_LONG[team]
+    # teamID = TEAM_IDS_LONG[team]
 
-    url = f"https://statsapi.web.nhl.com/api/v1/schedule?teamId={teamID}&season={season}"
+    # url = f"https://statsapi.web.nhl.com/api/v1/schedule?teamId={teamID}&season={season}"
+    # url = f"https://api-web.nhle.com/v1/club-schedule-season/{team}/{CURRENT_SEASON}"
+    url = f"https://api-web.nhle.com/v1/club-schedule-season/{team}/now"
 
     response = requests.get(url)
 
     if response.status_code != 200:
         return response.status_code
 
-    data = response.json()
+    data = response.json()['games']
 
-    # initializes list of dicts
-    info = [{} for _ in range(data['totalGames'])]
+    info = []
 
     # initializes counters
     totalGamesIndex = 0
     dayIndex = 0
     gameIndex = 0
 
-    while 1:
+    for game in data:
 
-        # info[totalGamesIndex]['gameDate'] = data['dates'][dayIndex]['games'][gameIndex]['gameDate']
+        curGame = {}
 
-        # info[totalGamesIndex]['gameTime'] = data['dates'][dayIndex]['games'][gameIndex]['gameDate']
-
-        dateTime = data['dates'][dayIndex]['games'][gameIndex]['gameDate']
-
-        # print(datetime.timestamp(info[totalGamesIndex]['gameDate'], tz=None))
-        # exit
+        dateTime = game['startTimeUTC']
 
         # gets time in UTC of game
         year = int(dateTime[:4])
@@ -327,85 +413,82 @@ def teamSchedule(team, timeZone, season = CURRENT_SEASON):
         day = int(dateTime[8:10])
         hour = int(dateTime[11:13])
         minute = int(dateTime[14:16])
-        # second = int(dateTime[17:19])
-
-        # print(second)
-        # exit
-
+        
         # converts date and time to selected timezone
         tempDate = datetime(year, month, day, hour, minute)
         tempDate = utc_to_time(tempDate, timeZone)
-        info[totalGamesIndex]['gameDate'] = tempDate.strftime("%b %d, %Y")
-        info[totalGamesIndex]['gameTime'] = tempDate.strftime("%I:%M%p")
+
+        curGame['gameDate'] = tempDate.strftime("%b %d, %Y")
+        curGame['gameTime'] = tempDate.strftime("%I:%M%p")
 
         # gets remaining game info
-        info[totalGamesIndex]['gameType'] =  data['dates'][dayIndex]['games'][gameIndex]['gameType']
-        info[totalGamesIndex]['venueName'] = data['dates'][dayIndex]['games'][gameIndex]['venue']['name']
-        info[totalGamesIndex]['awayTeamName'] = data['dates'][dayIndex]['games'][gameIndex]['teams']['away']['team']['name']
-        info[totalGamesIndex]['awayTeamId'] = data['dates'][dayIndex]['games'][gameIndex]['teams']['away']['team']['id']
-        info[totalGamesIndex]['homeTeamName'] = data['dates'][dayIndex]['games'][gameIndex]['teams']['home']['team']['name']
-        info[totalGamesIndex]['homeTeamId'] = data['dates'][dayIndex]['games'][gameIndex]['teams']['home']['team']['id']
-        info[totalGamesIndex]['gameStatus'] = data['dates'][dayIndex]['games'][gameIndex]['status']['detailedState']
+        curGame['gameType'] =  game['gameType']
+        curGame['venueName'] = game['venue']['default']
+        curGame['awayTeamName'] = game['awayTeam']['abbrev']
+        curGame['awayTeamId'] = game['awayTeam']['id']
+        curGame['homeTeamName'] = game['homeTeam']['abbrev']
+        curGame['homeTeamId'] = game['homeTeam']['id']
+        curGame['gameStatus'] = game['gameState']
 
-        # handles counter values 
-        if gameIndex < len(data['dates'][dayIndex]['games']) - 1: 
-            gameIndex += 1
-        else:
-            dayIndex += 1
-            gameIndex = 0
-        totalGamesIndex += 1
-
-        # if all games have been stored, break
-        if totalGamesIndex >= data['totalGames']:
-            break
+        info.append(curGame)
 
     return info
 
 # gets standings data (including wins, losses, etc.), gets from given season, if none given, defaults to current
+# returns stats dict (with wins, full team name, pts, etc.) and standings dict with standing by league, conference, and division
 def getStandings(season = CURRENT_SEASON):
 
     # season = "20212022"
 
-    url = f"https://statsapi.web.nhl.com/api/v1/standings?season={season}"
+    # url = f"https://statsapi.web.nhl.com/api/v1/standings?season={season}"
+    url = f"https://api-web.nhle.com/v1/standings/now"
 
     response = requests.get(url)
 
     if response.status_code != 200:
         return response.status_code
 
-    data = response.json()
+    data = response.json()['standings']
 
-    numTeams = 0
+    leagueStandings = []
+    conferenceStandings = {'Eastern':[], 'Western':[]}
+    divisionStandings = {DIV_NAMES[0]:[], DIV_NAMES[1]:[], DIV_NAMES[2]: [], DIV_NAMES[3]: []}
 
-    # initializes list of dicts
-    info = [{} for _ in range(TEAMS_IN_LEAGUE)]
+    # get order of teams, sort into lists by league, conference, and division
+    for place in range(1, TEAMS_IN_LEAGUE):
+        for team in data:
 
+            if team['leagueSequence'] == place:
+                leagueStandings.append(team['teamAbbrev']['default'])
 
-    # gets info for each team in each division
-    for i in range(len(data['records'])):
-        for j in range(len(data['records'][i]['teamRecords'])):
-            info[numTeams]['conferenceName'] = data['records'][i]['conference']['name']
-            info[numTeams]['divisionName'] = data['records'][i]['division']['name']
+            if team['conferenceSequence'] == place:
+                conferenceStandings[team['conferenceName']].append(team['teamAbbrev']['default'])
 
-            info[numTeams]['divisionRank'] = data['records'][i]['teamRecords'][j]['divisionRank']
-            info[numTeams]['conferenceRank'] = data['records'][i]['teamRecords'][j]['conferenceRank']
-            info[numTeams]['leagueRank'] = data['records'][i]['teamRecords'][j]['leagueRank']
+            if team['divisionSequence'] == place:
+                divisionStandings[team['divisionName']].append(team['teamAbbrev']['default'])
 
-            info[numTeams]['wins'] = data['records'][i]['teamRecords'][j]['leagueRecord']['wins']
-            info[numTeams]['losses'] = data['records'][i]['teamRecords'][j]['leagueRecord']['losses']
-            info[numTeams]['ot'] = data['records'][i]['teamRecords'][j]['leagueRecord']['ot']
+    standings = {'league': leagueStandings, 'conference': conferenceStandings, 'division': divisionStandings}
 
-            info[numTeams]['gamesPlayed'] = data['records'][i]['teamRecords'][j]['gamesPlayed']
+    
+    teamStats = {}
 
-            info[numTeams]['points']= info[numTeams]['wins'] * 2 + info[numTeams]['ot']
+    # get stats (pts, wins, etc.) of all teams to display in standings
+    for team in data:
 
-            info[numTeams]['teamName'] = data['records'][i]['teamRecords'][j]['team']['name']
+        curTeam = {}
 
-            info[numTeams]['teamID'] = TEAM_IDS_LONG[info[numTeams]['teamName']]
+        curTeam['wins'] = team['wins']
+        curTeam['losses'] = team['losses']
+        curTeam['ot'] = team['otLosses']
+        curTeam['gamesPlayed'] = team['gamesPlayed']
+        curTeam['points']= team['points']
+        curTeam['teamName'] = team['teamName']['default']
 
-            numTeams += 1
+        curTeam['logo'] = team['teamLogo']
 
-    return info
+        teamStats[team['teamAbbrev']['default']] = curTeam
+
+    return {'standings': standings, 'stats': teamStats}
 
 
 # takes in short team abbreviation, returns list of dicts of stats (0 -> actual numbers, 1 -> relative position (eg. 13))

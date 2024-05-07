@@ -27,11 +27,11 @@
         </div>
         
         <div class = "col">
-            <h1 id = "pName">{{ person['fullName'] }} #{{ person['primaryNumber'] }}</h1>
-            <h4 >{{ person['birthInfo'] }}</h4>
-            <h4>{{ person['birthDate'] }} (Age {{ person['currentAge'] }})</h4>
-            <h4>Height: {{ person['height'] }} - Weight: {{ person['weight'] }} lbs</h4>
-            <h4>{{ person['positionName'] }} - Shoots: {{ person['shootsCatches'] }}</h4>
+            <h1 id = "pName">{{ person['fullName'] }} #{{ person['sweaterNumber'] }}</h1>
+            <h4 >{{ person['birthLocationFull'] }}</h4>
+            <h4>{{ person['birthDate'] }} (Age {{ person['age'] }})</h4>
+            <h4>Height: {{ person['heightFull'] }} - Weight: {{ person['weightInPounds'] }} lbs</h4>
+            <h4>{{ person['positionFull'] }} - Shoots: {{ person['shootsCatches'] }}</h4>
             {% if person['teamName'] %}
             <h4>Current Team: {{ person['teamName'] }}</h4>
             {% endif %}
@@ -43,7 +43,7 @@
     <br>
 
     <table class="table table-striped">
-        {% if person['positionName'] != "Goalie" %}
+        {% if person['positionFull'] != "Goalie" %}
             <thead>
                 <tr>
                 <th scope="col">Year</th>
@@ -66,7 +66,7 @@
                         <td>{{ i['season'] }}</td>
                         <td>{{ i['league'] }}</td>
                         <td>{{ i['team'] }}</td>
-                        <td>{{ i['games'] }}</td>
+                        <td>{{ i['gamesPlayed'] }}</td>
                         <td>{{ i['goals'] }}</td>
                         <td>{{ i['assists'] }}</td>
                         <td>{{ i['points'] }}</td>
@@ -95,8 +95,8 @@
                             <td>{{ i['league'] }}</td>
                             <td>{{ i['team'] }}</td>
                             <td>{{ i['wins'] }}</td>
-                            <td>{{ i['savePercentage'] }}</td>
-                            <td>{{ i['goalAgainstAverage'] }}</td>
+                            <td>{{ i['savePctg'] }}</td>
+                            <td>{{ i['goalsAgainstAvg'] }}</td>
                             
                         </tr>
                     {% endfor %}
