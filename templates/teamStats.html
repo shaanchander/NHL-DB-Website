@@ -1,0 +1,149 @@
+{% extends "layout.html" %}
+
+{% block main %}
+
+<script>
+
+    // var counter = 1;
+
+    function testFunc() {
+        // document.getElementById("test").innerHTML = document.getElementById("testTable").rows[counter].getElementsByTagName("TD")[2].innerHTML;
+        // counter++;
+
+        // document.getElementById("test").innerHTML = "{{ full_team_stats[2]['penaltyKillPercentage']['value'] }}";
+
+        // document.getElementById("testTable").rows[i].getElementsByTagName("TD")[2].innerHTML = 
+
+        for (var i = 0; i < 32; i++) {
+        }
+    }
+</script>
+
+<style>
+    th {
+        cursor: pointer;
+    }
+</style>
+
+<div class = "container-fluid">
+
+    <h1 class = "fw-bold standingsTitles text-decoration-underline" id = "test">Special Teams</h1>
+    <br> <br>
+
+    <div class="row align-items-start">
+        <div class="col">
+            <h1 class = "fw-bold">Powerplay</h1>
+            <table class="table table-striped" id = "testTable">
+                <thead>
+                    <tr>
+                        <th scope="col" onclick = "testFunc();">Place</th>
+                        <th scope="col">Team</th>
+                        <th scope="col">Percentage</th>
+                </thead>
+                <tbody>
+
+                    {% for i in range(32) %}
+                        <tr>
+                            <td>{{ i+1 }}</td>
+                            <td class="text-center"><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ full_team_stats[i]['powerPlayPercentage']['teamID'] }}.svg" width = 40 height = 40>{{ REV_TEAM_IDS_LONG[full_team_stats[i]['powerPlayPercentage']['teamID']] }}</td>
+                            <td>{{ full_team_stats[i]['powerPlayPercentage']['value'] }}% ({{ full_team_stats[i]['powerPlayGoals']['value'] }}/{{ full_team_stats[i]['powerPlayOpportunities']['value'] }})</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col">
+            <h1 class = "fw-bold">Penalty Kill</h1>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Place</th>
+                        <th scope="col">Team</th>
+                        <th scope="col">Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for i in range(32) %}
+                        <tr>
+                            <td>{{ i+1 }}</td>
+                            <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ full_team_stats[i]['penaltyKillPercentage']['teamID'] }}.svg" width = 40 height = 40>  {{ REV_TEAM_IDS_LONG[full_team_stats[i]['penaltyKillPercentage']['teamID']] }}</td>
+                            <td>{{ full_team_stats[i]['penaltyKillPercentage']['value'] }}%</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<h1 class = "fw-bold standingsTitles text-decoration-underline">Other Stats</h1>
+<br> <br>
+
+<div class="row align-items-start">
+    <div class = "col">
+        <h1 class = "fw-bold">Faceoff %</h1>
+        <table class = "table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Place</th>
+                    <th scope="col">Team</th>
+                    <th scope="col">Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(32) %}
+                        <tr>
+                            <td>{{ i+1 }}</td>
+                            <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ full_team_stats[i]['faceOffWinPercentage']['teamID'] }}.svg" width = 40 height = 40>  {{ REV_TEAM_IDS_LONG[full_team_stats[i]['faceOffWinPercentage']['teamID']] }}</td>
+                            <td>{{ full_team_stats[i]['faceOffWinPercentage']['value'] }}%</td>
+                        </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class = "col">
+        <h1 class = "fw-bold">Shooting %</h1>
+        <table class = "table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Place</th>
+                    <th scope="col">Team</th>
+                    <th scope="col">Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(32) %}
+                        <tr>
+                            <td>{{ i+1 }}</td>
+                            <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ full_team_stats[i]['shootingPctg']['teamID'] }}.svg" width = 40 height = 40>  {{ REV_TEAM_IDS_LONG[full_team_stats[i]['shootingPctg']['teamID']] }}</td>
+                            <td>{{ full_team_stats[i]['shootingPctg']['value'] }}%</td>
+                        </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class = "col">
+        <h1 class = "fw-bold">Save %</h1>
+        <table class = "table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Place</th>
+                    <th scope="col">Team</th>
+                    <th scope="col">Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(32) %}
+                        <tr>
+                            <td>{{ i+1 }}</td>
+                            <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ full_team_stats[i]['savePctg']['teamID'] }}.svg" width = 40 height = 40>  {{ REV_TEAM_IDS_LONG[full_team_stats[i]['savePctg']['teamID']] }}</td>
+                            <td>{{ full_team_stats[i]['savePctg']['value'] }}%</td>
+                        </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
