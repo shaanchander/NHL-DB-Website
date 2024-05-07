@@ -1,6 +1,6 @@
 # used for debugging functions
 
-import sys
+import json
 from functions import *
 
 # id = playerSearch("josh", "norris", "OTT")
@@ -62,9 +62,25 @@ from functions import *
 
 # print(temp[1]['powerPlayPercentage'])
 
-temp = {}
+# temp = {}
 
-for i in TEAM_IDS_SHORT.keys():
-    temp[TEAM_IDS_SHORT[i]] = i
+# for i in TEAM_IDS_SHORT.keys():
+#     temp[TEAM_IDS_SHORT[i]] = i
 
-print(temp)
+# print(temp)
+
+# print(playerSearch('Igor', 'Shesterkin'))
+
+# print(json.dumps(allPlayerStats(8484144), indent=4))
+
+# print(json.dumps(peopleInfo(8477939), indent=4))
+
+# print(json.dumps(teamRoster("OTT"), indent=4))
+
+# print(json.dumps(teamSchedule("ott", "America/Toronto"), indent=4))
+
+# print(teamSchedule("ott", "America/Toronto"))
+
+# print(json.dumps(getStandings(), indent=4))
+
+print(json.dumps(teamRoster("ott"), indent=4))

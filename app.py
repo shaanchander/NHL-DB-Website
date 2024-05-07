@@ -59,7 +59,7 @@ def player_Search():
          pInfo['birthInfo'] = f"{pInfo['birthCity']}, {pInfo['birthCountry']}"
 
     # creates link for player image
-    link = f"http://nhl.bamcontent.com/images/headshots/current/168x168/{id}.jpg"
+    link = f"https://assets.nhle.com/mugs/nhl/latest/{id}.png"
     #link = f"https://assets.nhle.com/mugs/nhl/{stats[-1]['seasonStartYear']}{stats[-1]['seasonEndYear']}/{REV_TEAM_IDS_SHORT[TEAM_IDS_LONG[stats[-1]['team']]]}/{id}.png"
 
     return render_template("playerInfo.html", info = stats, person = pInfo, imgLink = link)
@@ -111,86 +111,89 @@ def schedule():
                 team_schedule[i]['gameStatus'] = 0
                 # pass
 
-    team_info = teamInfo(team)
+    # team_info = teamInfo(team)
 
-    return render_template("scheduleInfo.html", teamInfo = team_info, teamSchedule = team_schedule)
+    # return render_template("scheduleInfo.html", teamInfo = team_info, teamSchedule = team_schedule)
+    return render_template("scheduleInfo.html", teamSchedule = team_schedule)
 
 
 @app.route("/standings", methods = ['GET'])
 def standings():
 
-    temp_standings_data = getStandings()
+    # temp_standings_data = getStandings()
 
-    #divisionSortedStandings = [{} for _ in range(TEAMS_IN_LEAGUE)]
-    #conferenceSortedStandings = list([{} for _ in range(TEAMS_IN_LEAGUE)])
+    # #divisionSortedStandings = [{} for _ in range(TEAMS_IN_LEAGUE)]
+    # #conferenceSortedStandings = list([{} for _ in range(TEAMS_IN_LEAGUE)])
 
-    east = list([{} for _ in range(TEAMS_IN_CONFERENCE[0])])
-    west = list([{} for _ in range(TEAMS_IN_CONFERENCE[1])])
+    # east = list([{} for _ in range(TEAMS_IN_CONFERENCE[0])])
+    # west = list([{} for _ in range(TEAMS_IN_CONFERENCE[1])])
 
-    atlantic = list([{} for _ in range(TEAMS_IN_DIV[0])])
-    metro = list([{} for _ in range(TEAMS_IN_DIV[1])])
-    central = list([{} for _ in range(TEAMS_IN_DIV[2])])
-    pacific = list([{} for _ in range(TEAMS_IN_DIV[3])])
+    # atlantic = list([{} for _ in range(TEAMS_IN_DIV[0])])
+    # metro = list([{} for _ in range(TEAMS_IN_DIV[1])])
+    # central = list([{} for _ in range(TEAMS_IN_DIV[2])])
+    # pacific = list([{} for _ in range(TEAMS_IN_DIV[3])])
 
-    leagueSortedStandings = [{} for _ in range(TEAMS_IN_LEAGUE)]
+    # leagueSortedStandings = [{} for _ in range(TEAMS_IN_LEAGUE)]
 
-    # sorts standings over whole league
-    for i in range(1, TEAMS_IN_LEAGUE + 1):
-        for j in range(TEAMS_IN_LEAGUE):
-            if int(temp_standings_data[j]['leagueRank']) == int(i):
-                leagueSortedStandings[i - 1] = temp_standings_data[j]
-                break
+    # # sorts standings over whole league
+    # for i in range(1, TEAMS_IN_LEAGUE + 1):
+    #     for j in range(TEAMS_IN_LEAGUE):
+    #         if int(temp_standings_data[j]['leagueRank']) == int(i):
+    #             leagueSortedStandings[i - 1] = temp_standings_data[j]
+    #             break
 
-    # sorts standings over conference
-    # does the east
-    for k in range(TEAMS_IN_CONFERENCE[0]):
-        for m in range(TEAMS_IN_LEAGUE):
-            if int(temp_standings_data[m]['conferenceRank']) == int(k + 1) and temp_standings_data[m]['conferenceName'] == "Eastern":
-                east[k] = temp_standings_data[m]
-                break
+    # # sorts standings over conference
+    # # does the east
+    # for k in range(TEAMS_IN_CONFERENCE[0]):
+    #     for m in range(TEAMS_IN_LEAGUE):
+    #         if int(temp_standings_data[m]['conferenceRank']) == int(k + 1) and temp_standings_data[m]['conferenceName'] == "Eastern":
+    #             east[k] = temp_standings_data[m]
+    #             break
 
-    # does the west
-    for n in range(TEAMS_IN_CONFERENCE[1]):
-        for p in range(TEAMS_IN_LEAGUE):
-            if int(temp_standings_data[p]['conferenceRank']) == int(n + 1) and temp_standings_data[p]['conferenceName'] == "Western":
-                west[n] = temp_standings_data[p]
-                break
+    # # does the west
+    # for n in range(TEAMS_IN_CONFERENCE[1]):
+    #     for p in range(TEAMS_IN_LEAGUE):
+    #         if int(temp_standings_data[p]['conferenceRank']) == int(n + 1) and temp_standings_data[p]['conferenceName'] == "Western":
+    #             west[n] = temp_standings_data[p]
+    #             break
         
-    conferenceSortedStandings = [east, west]
+    # conferenceSortedStandings = [east, west]
 
-    # sorts standings by division
-    # does atlantic
-    for q in range(TEAMS_IN_DIV[0]):
-        for r in range(TEAMS_IN_LEAGUE):
-            if int(temp_standings_data[r]['divisionRank']) == int(q + 1) and temp_standings_data[r]['divisionName'] == "Atlantic":
-                atlantic[q] = temp_standings_data[r]
-                break
+    # # sorts standings by division
+    # # does atlantic
+    # for q in range(TEAMS_IN_DIV[0]):
+    #     for r in range(TEAMS_IN_LEAGUE):
+    #         if int(temp_standings_data[r]['divisionRank']) == int(q + 1) and temp_standings_data[r]['divisionName'] == "Atlantic":
+    #             atlantic[q] = temp_standings_data[r]
+    #             break
 
-    # does metro
-    for q in range(TEAMS_IN_DIV[1]):
-        for r in range(TEAMS_IN_LEAGUE):
-            if int(temp_standings_data[r]['divisionRank']) == int(q + 1) and temp_standings_data[r]['divisionName'] == "Metropolitan":
-                metro[q] = temp_standings_data[r]
-                break
+    # # does metro
+    # for q in range(TEAMS_IN_DIV[1]):
+    #     for r in range(TEAMS_IN_LEAGUE):
+    #         if int(temp_standings_data[r]['divisionRank']) == int(q + 1) and temp_standings_data[r]['divisionName'] == "Metropolitan":
+    #             metro[q] = temp_standings_data[r]
+    #             break
 
-    # does the central
-    for q in range(TEAMS_IN_DIV[2]):
-        for r in range(TEAMS_IN_LEAGUE):
-            if int(temp_standings_data[r]['divisionRank']) == int(q + 1) and temp_standings_data[r]['divisionName'] == "Central":
-                central[q] = temp_standings_data[r]
-                break
+    # # does the central
+    # for q in range(TEAMS_IN_DIV[2]):
+    #     for r in range(TEAMS_IN_LEAGUE):
+    #         if int(temp_standings_data[r]['divisionRank']) == int(q + 1) and temp_standings_data[r]['divisionName'] == "Central":
+    #             central[q] = temp_standings_data[r]
+    #             break
 
-    # does the pacific
-    for q in range(TEAMS_IN_DIV[3]):
-        for r in range(TEAMS_IN_LEAGUE):
-            if int(temp_standings_data[r]['divisionRank']) == int(q + 1) and temp_standings_data[r]['divisionName'] == "Pacific":
-                pacific[q] = temp_standings_data[r]
-                break
+    # # does the pacific
+    # for q in range(TEAMS_IN_DIV[3]):
+    #     for r in range(TEAMS_IN_LEAGUE):
+    #         if int(temp_standings_data[r]['divisionRank']) == int(q + 1) and temp_standings_data[r]['divisionName'] == "Pacific":
+    #             pacific[q] = temp_standings_data[r]
+    #             break
 
 
-    divisionSortedStandings = [atlantic, metro, central, pacific]
+    # divisionSortedStandings = [atlantic, metro, central, pacific]
 
-    return render_template("standings.html", leagueStandings = leagueSortedStandings, conferenceStandings = conferenceSortedStandings, divisionStandings = divisionSortedStandings)
+    # return render_template("standings.html", leagueStandings = leagueSortedStandings, conferenceStandings = conferenceSortedStandings, divisionStandings = divisionSortedStandings)
+    
+    return render_template("standings.html", data = getStandings())
 
 @app.route("/teamStats", methods = ['GET'])
 def team_Stats():

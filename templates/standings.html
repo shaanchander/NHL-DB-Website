@@ -19,15 +19,17 @@
         </thead>
         <tbody>
 
-            {% for i in range(32) %}
+            {% for team in range(data['standings']['league']|length) %}
+
+                {% set teamShort = data['standings']['league'][team] %}
                 <tr>
-                    <td>{{ leagueStandings[i]['leagueRank'] }}</td>
-                    <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ leagueStandings[i]['teamID'] }}.svg" width = 40 height = 40>{{ leagueStandings[i]['teamName'] }}</td>
-                    <td>{{ leagueStandings[i]['points'] }}</td>
-                    <td>{{ leagueStandings[i]['gamesPlayed'] }}</td>
-                    <td>{{ leagueStandings[i]['wins'] }}</td>
-                    <td>{{ leagueStandings[i]['losses'] }}</td>
-                    <td>{{ leagueStandings[i]['ot'] }}</td>
+                    <td>{{ team + 1 }}</td>
+                    <td><img src="{{ data['stats'][teamShort]['logo'] }}" width = 40 height = 40>{{ data['stats'][teamShort]['teamName'] }}</td>
+                    <td>{{ data['stats'][teamShort]['points'] }}</td>
+                    <td>{{ data['stats'][teamShort]['gamesPlayed'] }}</td>
+                    <td>{{ data['stats'][teamShort]['wins'] }}</td>
+                    <td>{{ data['stats'][teamShort]['losses'] }}</td>
+                    <td>{{ data['stats'][teamShort]['ot'] }}</td>
                 </tr>
             {% endfor %}
         </tbody>
@@ -54,15 +56,18 @@
                 </thead>
                 <tbody>
 
-                    {% for i in range(16) %}
+                    {% for team in range(data['standings']['conference']['Eastern']|length) %}
+
+                        {% set teamShort = data['standings']['conference']['Eastern'][team] %}
                         <tr>
-                            <td>{{ conferenceStandings[0][i]['conferenceRank'] }}</td>
-                            <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ conferenceStandings[0][i]['teamID'] }}.svg" width = 40 height = 40>  {{ conferenceStandings[0][i]['teamName'] }}</td>
-                            <td>{{ conferenceStandings[0][i]['points'] }}</td>
-                            <td>{{ conferenceStandings[0][i]['wins'] }}</td>
-                            <td>{{ conferenceStandings[0][i]['losses'] }}</td>
-                            <td>{{ conferenceStandings[0][i]['ot'] }}</td>
-                            </tr>
+                            <td>{{ team + 1 }}</td>
+                            <td><img src="{{ data['stats'][teamShort]['logo'] }}" width = 40 height = 40>{{ data['stats'][teamShort]['teamName'] }}</td>
+                            <td>{{ data['stats'][teamShort]['points'] }}</td>
+                            <td>{{ data['stats'][teamShort]['gamesPlayed'] }}</td>
+                            <td>{{ data['stats'][teamShort]['wins'] }}</td>
+                            <td>{{ data['stats'][teamShort]['losses'] }}</td>
+                            <td>{{ data['stats'][teamShort]['ot'] }}</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
@@ -82,14 +87,17 @@
                 </thead>
                 <tbody>
 
-                    {% for i in range(16) %}
+                    {% for team in range(data['standings']['conference']['Western']|length) %}
+
+                        {% set teamShort = data['standings']['conference']['Western'][team] %}
                         <tr>
-                            <td>{{ conferenceStandings[1][i]['conferenceRank'] }}</td>
-                            <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ conferenceStandings[1][i]['teamID'] }}.svg" width = 40 height = 40>  {{ conferenceStandings[1][i]['teamName'] }}</td>
-                            <td>{{ conferenceStandings[1][i]['points'] }}</td>
-                            <td>{{ conferenceStandings[1][i]['wins'] }}</td>
-                            <td>{{ conferenceStandings[1][i]['losses'] }}</td>
-                            <td>{{ conferenceStandings[1][i]['ot'] }}</td>
+                            <td>{{ team + 1 }}</td>
+                            <td><img src="{{ data['stats'][teamShort]['logo'] }}" width = 40 height = 40>{{ data['stats'][teamShort]['teamName'] }}</td>
+                            <td>{{ data['stats'][teamShort]['points'] }}</td>
+                            <td>{{ data['stats'][teamShort]['gamesPlayed'] }}</td>
+                            <td>{{ data['stats'][teamShort]['wins'] }}</td>
+                            <td>{{ data['stats'][teamShort]['losses'] }}</td>
+                            <td>{{ data['stats'][teamShort]['ot'] }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -118,14 +126,17 @@
                 </thead>
                 <tbody>
 
-                    {% for i in range(8) %}
+                    {% for team in range(data['standings']['division']['Atlantic']|length) %}
+
+                        {% set teamShort = data['standings']['division']['Atlantic'][team] %}
                         <tr>
-                            <td>{{ divisionStandings[0][i]['divisionRank'] }}</td>
-                            <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ divisionStandings[0][i]['teamID'] }}.svg" width = 40 height = 40>  {{ divisionStandings[0][i]['teamName'] }}</td>
-                            <td>{{ divisionStandings[0][i]['points'] }}</td>
-                            <td>{{ divisionStandings[0][i]['wins'] }}</td>
-                            <td>{{ divisionStandings[0][i]['losses'] }}</td>
-                            <td>{{ divisionStandings[0][i]['ot'] }}</td>
+                            <td>{{ team + 1 }}</td>
+                            <td><img src="{{ data['stats'][teamShort]['logo'] }}" width = 40 height = 40>{{ data['stats'][teamShort]['teamName'] }}</td>
+                            <td>{{ data['stats'][teamShort]['points'] }}</td>
+                            <td>{{ data['stats'][teamShort]['gamesPlayed'] }}</td>
+                            <td>{{ data['stats'][teamShort]['wins'] }}</td>
+                            <td>{{ data['stats'][teamShort]['losses'] }}</td>
+                            <td>{{ data['stats'][teamShort]['ot'] }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -147,14 +158,17 @@
                     </thead>
                     <tbody>
 
-                        {% for i in range(8) %}
+                        {% for team in range(data['standings']['division']['Metropolitan']|length) %}
+
+                            {% set teamShort = data['standings']['division']['Metropolitan'][team] %}
                             <tr>
-                                <td>{{ divisionStandings[1][i]['divisionRank'] }}</td>
-                                <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ divisionStandings[1][i]['teamID'] }}.svg" width = 40 height = 40>  {{ divisionStandings[1][i]['teamName'] }}</td>
-                                <td>{{ divisionStandings[1][i]['points'] }}</td>
-                                <td>{{ divisionStandings[1][i]['wins'] }}</td>
-                                <td>{{ divisionStandings[1][i]['losses'] }}</td>
-                                <td>{{ divisionStandings[1][i]['ot'] }}</td>
+                                <td>{{ team + 1 }}</td>
+                                <td><img src="{{ data['stats'][teamShort]['logo'] }}" width = 40 height = 40>{{ data['stats'][teamShort]['teamName'] }}</td>
+                                <td>{{ data['stats'][teamShort]['points'] }}</td>
+                                <td>{{ data['stats'][teamShort]['gamesPlayed'] }}</td>
+                                <td>{{ data['stats'][teamShort]['wins'] }}</td>
+                                <td>{{ data['stats'][teamShort]['losses'] }}</td>
+                                <td>{{ data['stats'][teamShort]['ot'] }}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -178,14 +192,17 @@
                 </thead>
                 <tbody>
 
-                    {% for i in range(8) %}
-                        <tr> 
-                            <td>{{ divisionStandings[2][i]['divisionRank'] }}</td>
-                            <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ divisionStandings[2][i]['teamID'] }}.svg" width = 40 height = 40>  {{ divisionStandings[2][i]['teamName'] }}</td>
-                            <td>{{ divisionStandings[2][i]['points'] }}</td>
-                            <td>{{ divisionStandings[2][i]['wins'] }}</td>
-                            <td>{{ divisionStandings[2][i]['losses'] }}</td>
-                            <td>{{ divisionStandings[2][i]['ot'] }}</td>
+                    {% for team in range(data['standings']['division']['Central']|length) %}
+
+                        {% set teamShort = data['standings']['division']['Central'][team] %}
+                        <tr>
+                            <td>{{ team + 1 }}</td>
+                            <td><img src="{{ data['stats'][teamShort]['logo'] }}" width = 40 height = 40>{{ data['stats'][teamShort]['teamName'] }}</td>
+                            <td>{{ data['stats'][teamShort]['points'] }}</td>
+                            <td>{{ data['stats'][teamShort]['gamesPlayed'] }}</td>
+                            <td>{{ data['stats'][teamShort]['wins'] }}</td>
+                            <td>{{ data['stats'][teamShort]['losses'] }}</td>
+                            <td>{{ data['stats'][teamShort]['ot'] }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -207,14 +224,17 @@
                 </thead>
                 <tbody>
 
-                    {% for i in range(8) %}
+                    {% for team in range(data['standings']['division']['Pacific']|length) %}
+
+                        {% set teamShort = data['standings']['division']['Pacific'][team] %}
                         <tr>
-                            <td>{{ divisionStandings[3][i]['divisionRank'] }}</td>
-                            <td><img src="https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/{{ divisionStandings[3][i]['teamID'] }}.svg" width = 40 height = 40>  {{ divisionStandings[3][i]['teamName'] }}</td>
-                            <td>{{ divisionStandings[3][i]['points'] }}</td>
-                            <td>{{ divisionStandings[3][i]['wins'] }}</td>
-                            <td>{{ divisionStandings[3][i]['losses'] }}</td>
-                            <td>{{ divisionStandings[3][i]['ot'] }}</td>
+                            <td>{{ team + 1 }}</td>
+                            <td><img src="{{ data['stats'][teamShort]['logo'] }}" width = 40 height = 40>{{ data['stats'][teamShort]['teamName'] }}</td>
+                            <td>{{ data['stats'][teamShort]['points'] }}</td>
+                            <td>{{ data['stats'][teamShort]['gamesPlayed'] }}</td>
+                            <td>{{ data['stats'][teamShort]['wins'] }}</td>
+                            <td>{{ data['stats'][teamShort]['losses'] }}</td>
+                            <td>{{ data['stats'][teamShort]['ot'] }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
